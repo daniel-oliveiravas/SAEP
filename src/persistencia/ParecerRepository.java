@@ -11,8 +11,7 @@ public interface ParecerRepository {
     /*
     * Implementação da busca do Parecer pelo identificador
     *
-    * @params:
-    *   String identificador do Parecer
+    * @param String identificador do Parecer
     * */
     Parecer findById(String identificador);
 
@@ -21,8 +20,7 @@ public interface ParecerRepository {
     * Implementação do método responsável por persistir
     * o objeto Parecer
     *
-    * @params:
-    *   Parecer parecer a ser persistido
+    * @param Parecer parecer a ser persistido
     * */
 
     void salvarParecer(Parecer parecer);
@@ -30,8 +28,7 @@ public interface ParecerRepository {
     /*
     * Implementação da remoção do Parecer
     *
-    * @params:
-    *   String identificador do Parecer a ser removido
+    * @param String identificador do Parecer a ser removido
     * */
 
     void removeParecer(String identificador);
@@ -39,9 +36,8 @@ public interface ParecerRepository {
     /*
     * Implementação da edição da descrição de um Parecer
     *
-    * @params:
-    *   String identificador do Radoc a ser editado
-    *   String novaDescricao que será editada no Parecer
+    * @param String identificador do Radoc a ser editado
+    * @param String novaDescricao que será editada no Parecer
     *
     * */
 

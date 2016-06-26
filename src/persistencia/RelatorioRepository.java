@@ -13,16 +13,14 @@ public interface RelatorioRepository {
     /*
     * Abstração da implementação para salvar Relatório (RADOC)
     *
-    * @params
-    *   Relatorio relatorio - O objeto Relatorio a ser persistido
+    * @param Relatorio relatorio - O objeto Relatorio a ser persistido
     * */
 
     void salvarRelatorio(Relatorio relatorio);
 
     /*
     * Remoção de um relatório
-    * @params
-    *   String identificador - identificador do relatório
+    * @param String identificador - identificador do relatório
     *
     * */
 
@@ -30,17 +28,15 @@ public interface RelatorioRepository {
 
     /*
     * Busca o relatório pelo identificador único
-    * @params:
-    *   String identificador - identificador do relatório
+    * @param String identificador - identificador do relatório
     *
     * */
     Relatorio findById(String identificador);
 
     /*
     * Edita o anoBase de um Relatório
-    * @params
-    *   String identificador - Identificador único do relatório
-    *   int novoAnoBase - Editar o ano Base do relatório
+    * @param String identificador - Identificador único do relatório
+    * @param int novoAnoBase - Editar o ano Base do relatório
     * */
     void editarAnoBase(String identificador, int novoAnoBase);
 

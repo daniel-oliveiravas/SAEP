@@ -16,16 +16,14 @@ public interface RelatoRepository {
     /*
     * Salvar um relato de um docente
     *
-    * @params:
-    *   Relato relato - O objeto Relato a ser persistido
+    * @param Relato relato - O objeto Relato a ser persistido
     *
     * */
     void salvarRelato(Relato relato);
 
     /*
     * Remover um relato de um docente
-    * @params:
-    *   String identificador - Identificador único do relato
+    * @param String identificador - Identificador único do relato
     *
     * */
     void removerRelato(String identificador);
@@ -38,11 +36,10 @@ public interface RelatoRepository {
     * Logo, precisamos obter o identificador do relato, o objeto com suas modificações
     * e uma justificativa.
     *
-    * @params:
-    *  String identificador - Identificador do relato que está sendo alterado
-    *  Relato relato - O novo objeto relato com suas alterações. (É necessário que este seja
-    *  uma cópia do objeto original, exceto nos valores e atributos onde ocorreram as modificações)
-    *  String justificativa - Texto explicando o motivo da alteração do relato
+    * @param String identificador - Identificador do relato que está sendo alterado
+    * @param Relato relato - O novo objeto relato com suas alterações. (É necessário que este seja
+    * @param uma cópia do objeto original, exceto nos valores e atributos onde ocorreram as modificações)
+    * @param String justificativa - Texto explicando o motivo da alteração do relato
     * @return:
     *   O objeto modificado que foi salvo no banco de dados. Caso não tenha sido possível salvar o objeto,
     *   o retorno será null.
@@ -52,8 +49,7 @@ public interface RelatoRepository {
     /*
     * Obter lista de relatos de um relatório
     *
-    * @params:
-    *   String identificadorRelatorio - É o identificador único do relatório ao qual os relatos pertencem
+    * @param String identificadorRelatorio - É o identificador único do relatório ao qual os relatos pertencem
     * @return:
     *   List<Relatos> - Uma lista de todos os relatos de um relatório
     * */
@@ -62,8 +58,7 @@ public interface RelatoRepository {
     /*
     * Obter relato pelo identificador
     *
-    * @params:
-    *   String identificador - Identificador único do relato
+    * @param String identificador - Identificador único do relato
     *
     * */
     Relato findById(String identificador);
