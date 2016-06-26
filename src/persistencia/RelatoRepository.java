@@ -7,9 +7,9 @@ import java.util.List;
 
 /*
 * Repositório responsável pela abstração da persistência
-* do objeto Relatório.
-* Um relatório é um conjunto de relatos, porém este serviço não trata
-* da operação de edição dos relatos de um Relatório.
+* do objeto Relato.
+* Um relato equivale a uma atividade ou produto realizado por um
+* docente em um determinado período
 * */
 public interface RelatoRepository {
 
