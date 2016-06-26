@@ -1,4 +1,4 @@
-package persistencia;
+package persistencia.interfaces;
 
 import model.Relatorio;
 

@@ -1,7 +1,5 @@
-package persistencia;
+package persistencia.interfaces;
 
-import model.Atributo;
-import model.Relato;
 import model.RelatoAlterado;
 
 /*
