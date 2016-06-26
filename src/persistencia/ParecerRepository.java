@@ -3,7 +3,7 @@ package persistencia;
 import model.Parecer;
 
 /*
-* Repositório responsável pela abstração
+* Repositório responsável pela abstração da persistência
 * do objeto Parecer
 * */
 public interface ParecerRepository {
