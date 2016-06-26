@@ -1,7 +1,7 @@
 package persistencia;
 
-import model.Relato;
 import model.Relatorio;
+
 /*
 * Repositório responsável pela abstração da persistência
 * do objeto Relatório.
