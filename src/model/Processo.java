@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Processo {
 
+    String identificador;
     String tipoProcesso;
     String matriculaDocente;
     Date dataAbertura;
