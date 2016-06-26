@@ -38,7 +38,7 @@ public interface RelatoRepository {
     *
     * @param String identificador - Identificador do relato que está sendo alterado
     * @param Relato relato - O novo objeto relato com suas alterações. (É necessário que este seja
-    * @param uma cópia do objeto original, exceto nos valores e atributos onde ocorreram as modificações)
+    * uma cópia do objeto original, exceto nos valores e atributos onde ocorreram as modificações)
     * @param String justificativa - Texto explicando o motivo da alteração do relato
     * @return:
     *   O objeto modificado que foi salvo no banco de dados. Caso não tenha sido possível salvar o objeto,

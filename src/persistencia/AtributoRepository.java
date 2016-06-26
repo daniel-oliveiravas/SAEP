@@ -21,14 +21,14 @@ public interface AtributoRepository {
     *
     * @param String identificador - O identificador do atributo a ser removido
     * */
-    void removerAtributo(Atributo atributo);
+    void removerAtributo(String identificador);
 
     /*
     * Altera um atributo
     *
     * @param String identificador - O identificador do atributo a ser alterado
     * @param Atributo atributoModificado - O atributo com os novos dados a serem
-    * @param persistidos
+    * persistidos
     * */
     void alterarAtributo(String identificador, Atributo atributoModificado);
 
