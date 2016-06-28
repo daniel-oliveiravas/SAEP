@@ -23,7 +23,7 @@ public interface ProcessoRepository {
     *
     * @param String identificador
     * */
-    Processo removerProcesso(String identificador);
+    void removerProcesso(String identificador);
 
     /*
     * Alterar Processo passando o identificador
@@ -32,13 +32,13 @@ public interface ProcessoRepository {
     * @param String identificador
     * @param Processo processo
     * */
-    Processo removerProcesso(String identificador, Processo processo);
+    void alterarProcesso(String identificador, Processo processo);
 
     /*
     * Salva o objeto Processo
     *
     * @param Processo processo
     * */
-    Processo salvarProcesso(Processo processo);
+    void salvarProcesso(Processo processo);
 
 }

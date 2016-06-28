@@ -41,6 +41,6 @@ public interface ParecerRepository {
     *
     * */
 
-    void editarParecer(String identificador, String novaDescricao);
+    void editarParecer(String identificador, Parecer novoParecer);
 
 }
