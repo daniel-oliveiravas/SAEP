@@ -1,18 +1,18 @@
 
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import model.Regra;
 import model.Resolucao;
 import org.bson.Document;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import persistencia.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
-
-import static com.mongodb.client.model.Filters.eq;
 
 public class DatabaseHelperTest {
 
