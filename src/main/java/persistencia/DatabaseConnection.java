@@ -9,7 +9,6 @@ public class DatabaseConnection {
     private static MongoDatabase mongoDB = mongoClient.getDatabase("SAEP");
 
     public static MongoDatabase getDatabaseConnection() {
-        mongoDB.getCollection("teste");
         return mongoDB;
     }
 }
