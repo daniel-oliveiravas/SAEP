@@ -24,18 +24,18 @@ public class DatabaseHelperTest {
     @BeforeClass
     public static void setup() {
         createDatabaseConnection();
+        createCollectionsForTest();
     }
 
     @AfterClass
-    public void destroyCollections() {
-        mongoDB.getCollection("resolucao").drop();
+    public static void clearTestDatabase() {
+        destroyTestCollections();
     }
 
     @Test
     public void testeFindResolucaoById() {
         DatabaseHelper dbHelper = new DatabaseHelper(mongoDB);
 
-        mongoDB.createCollection("resolucao");
 
         String identificadorResolucao = "12345";
         Resolucao resolucao = criaObjetoResolucao(identificadorResolucao);
@@ -63,5 +63,14 @@ public class DatabaseHelperTest {
     private static void createDatabaseConnection() {
         mongoClient = new MongoClient();
         mongoDB = mongoClient.getDatabase("SAEP-test");
+    }
+
+    private static void createCollectionsForTest() {
+        mongoDB.createCollection("resolucao");
+    }
+
+    private static void destroyTestCollections() {
+        mongoDB.getCollection("resolucao").drop();
+
     }
 }
