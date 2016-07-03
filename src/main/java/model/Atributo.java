@@ -25,7 +25,13 @@ public class Atributo {
 
     /**
      * O nome do atributo, por exemplo,
-     * "cha" ou "nome".
+     * "cha" ou "nome". O nome de um atributo
+     * deve ser único em vários contextos, por
+     * exemplo, em um dado {@link Tipo}, não
+     * pode existir mais de um atributo com o
+     * mesmo nome.
+     *
+     * <p>Trata-se de uma chave natural.
      */
     private String nome;
 
@@ -45,10 +51,20 @@ public class Atributo {
      * ser algo como "nome completo do periódico,
      * por exemplo, International Journal of Health
      * Informatics.".
+     *
+     * <p>A descrição não é obrigatória.
      */
     private String descricao;
 
     public Atributo(String nome, String descricao, int tipo) {
+        if (nome == null || nome.isEmpty()) {
+            throw new CampoExigidoNaoFornecido("nome");
+        }
+
+        if (tipo < LOGICO || tipo > STRING) {
+            throw new TipoInvalido("tipo");
+        }
+
         this.nome = nome;
         this.descricao = descricao;
         this.tipo = tipo;
@@ -64,11 +80,42 @@ public class Atributo {
     }
 
     /**
-     * Recupera o tipo primitivo do atributo.
+     * Recupera o tipo do atributo
      *
-     * @return O tipo do atributo.
+     * @return O tipo do atributo, ou seja, o
+     * valor {@link #LOGICO}, {@link #REAL} ou
+     * {@link #STRING}.
      */
     public int getTipo() {
         return tipo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Atributo atributo = (Atributo) o;
+
+        return nome.equals(atributo.nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return nome.hashCode();
+    }
+
+    /**
+     * Recupera a descrição do atributo.
+     *
+     * @return Descrição do atributo.
+     */
+    public String getDescricao() {
+        return descricao;
     }
 }

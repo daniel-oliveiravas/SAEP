@@ -20,8 +20,7 @@ public class DatabaseHelper {
     * @param String jsonObject - O objeto serializado para JSON no formato de uma String
     * @param String collectionName - o nome da coleção em que este objeto será salvo
     *
-    * @return Object identificador do objeto no banco de dados
-    * */
+    */
     public void saveIntoCollection(String jsonObject, String collectionName) {
 
         MongoCollection<Document> collection = getCollection(collectionName);
@@ -39,6 +38,23 @@ public class DatabaseHelper {
     public Document findById(String nomeIdentificador, String valorIdentificador, String collectionNome) {
         MongoCollection<Document> collection = getCollection(collectionNome);
         return collection.find(eq(nomeIdentificador, valorIdentificador)).first();
+    }
+
+    /*
+    * Atualiza um objeto de uma coleção pelo JSON no formato de uma String
+    *
+    * @param idName - Nome do identificador utilizado para diferenciar este objeto dos demais
+    * @param idValue - Valor do identificador a ser procurado na coleção
+    * @param String jsonObject - Objeto a ser atualizado no formato de uma String
+    * @param String collectionName - O nome da coleção em que o objeto será atualizado
+    *
+    * */
+    public void updateCollectionObject(String idName, String idValue, String jsonObject, String collectionName) {
+
+        MongoCollection<Document> collection = getCollection(collectionName);
+        Document documentToUpdate = parseJsonToDocument(jsonObject);
+        collection.replaceOne(eq(idName, idValue), documentToUpdate);
+
     }
 
 
