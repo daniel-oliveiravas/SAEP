@@ -1,30 +1,34 @@
 package persistencia;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import model.Avaliavel;
 import model.Nota;
 import model.Parecer;
 import model.Radoc;
 import org.bson.Document;
+import persistencia.custom.NotaDeserialize;
 import persistencia.repository.ParecerRepository;
 
 import java.util.List;
 
 public class MongoParecerRepository implements ParecerRepository {
 
-    private static final String parecerCollection = "parecer";
+    public static final String parecerCollection = "parecer";
     private DatabaseHelper dbHelper;
-    private Gson gson;
+    private static Gson gson;
 
     public MongoParecerRepository(DatabaseHelper dbHelper) {
         this.dbHelper = dbHelper;
-        this.gson = new Gson();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Nota.class, new NotaDeserialize());
+        gson = gsonBuilder.create();
     }
 
     @Override
     public void adicionaNota(String parecer, Nota nota) {
         //Buscando Objeto Parecer com auxilio da classe DatabaseHelper
-        Document parecerDocument = dbHelper.findById("guid", parecer, parecerCollection);
+        Document parecerDocument = dbHelper.findById("id", parecer, parecerCollection);
 
         if (parecerDocument != null) {
             String parecerJson = gson.toJson(parecerDocument);
@@ -46,7 +50,7 @@ public class MongoParecerRepository implements ParecerRepository {
 
             String novoParecerJson = gson.toJson(novoParecer);
 
-            dbHelper.updateCollectionObject("guid", parecer, novoParecerJson, parecerCollection);
+            dbHelper.updateCollectionObject("id", parecer, novoParecerJson, parecerCollection);
 
         }
         // else {
@@ -61,6 +65,9 @@ public class MongoParecerRepository implements ParecerRepository {
 
     @Override
     public void persisteParecer(Parecer parecer) {
+
+        String parecerJson = gson.toJson(parecer);
+        dbHelper.saveIntoCollection(parecerJson, parecerCollection);
 
     }
 

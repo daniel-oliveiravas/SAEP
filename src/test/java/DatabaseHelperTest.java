@@ -1,6 +1,5 @@
 
 import com.google.gson.Gson;
-import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import model.Regra;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DatabaseHelperTest {
+public class DatabaseHelperTest extends SaepTestSpecification {
 
     private static MongoDatabase mongoDB;
     private static DatabaseHelper dbHelper;
@@ -22,7 +21,7 @@ public class DatabaseHelperTest {
 
     @BeforeClass
     public static void testClassConfig() {
-        createDatabaseConnection();
+        mongoDB = createDatabaseConnection();
         dbHelper = new DatabaseHelper(mongoDB);
     }
 
@@ -116,10 +115,6 @@ public class DatabaseHelperTest {
         return listaRegras;
     }
 
-    private static void createDatabaseConnection() {
-        MongoClient mongoClient = new MongoClient();
-        mongoDB = mongoClient.getDatabase("SAEP-test");
-    }
 
     private static void createCollectionsForTest() {
         mongoDB.createCollection("resolucao");
