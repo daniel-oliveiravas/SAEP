@@ -122,6 +122,5 @@ public class DatabaseHelperTest extends SaepTestSpecification {
 
     private static void destroyTestCollections() {
         mongoDB.getCollection("resolucao").drop();
-
     }
 }
