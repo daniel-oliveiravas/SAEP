@@ -57,6 +57,16 @@ public class DatabaseHelper {
 
     }
 
+    /*
+    * Remove um objecto de uma coleção pelo identificador do objeto
+    * */
+    public void removeObjectFromCollection(String idName, String idValue, String collectionName) {
+
+        MongoCollection<Document> collection = getCollection(collectionName);
+        collection.deleteOne(eq(idName, idValue));
+
+    }
+
 
     private Document parseJsonToDocument(String jsonObject) {
         return Document.parse(jsonObject);

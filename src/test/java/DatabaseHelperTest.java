@@ -1,6 +1,7 @@
 
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import model.Regra;
 import model.Resolucao;
@@ -14,21 +15,24 @@ import java.util.List;
 
 public class DatabaseHelperTest {
 
-    private static MongoClient mongoClient;
     private static MongoDatabase mongoDB;
     private static DatabaseHelper dbHelper;
 
     private Gson gson = new Gson();
 
     @BeforeClass
-    public static void setup() {
+    public static void testClassConfig() {
         createDatabaseConnection();
-        createCollectionsForTest();
         dbHelper = new DatabaseHelper(mongoDB);
     }
 
-    @AfterClass
-    public static void clearTestDatabase() {
+    @Before
+    public void setup() {
+        createCollectionsForTest();
+    }
+
+    @After
+    public void clearTestDatabase() {
         destroyTestCollections();
     }
 
@@ -74,6 +78,23 @@ public class DatabaseHelperTest {
 
     }
 
+    @Test
+    public void testeRemoveResolucao() {
+
+        String idResolucao = "123";
+        Resolucao resolucao = criaObjetoResolucao(idResolucao, criaListaDeRegras());
+        MongoCollection<Document> resolucaoCollection = mongoDB.getCollection("resolucao");
+
+        dbHelper.saveIntoCollection(gson.toJson(resolucao), "resolucao");
+
+        long collectionSizeBeforeRemove = resolucaoCollection.count();
+        dbHelper.removeObjectFromCollection("nome", idResolucao, "resolucao");
+        long collectionSizeAfterRemove = resolucaoCollection.count();
+
+        Assert.assertEquals(1, collectionSizeBeforeRemove);
+        Assert.assertEquals(0, collectionSizeAfterRemove);
+    }
+
     private Resolucao criaObjetoResolucao(String identificadorResolucao, List<Regra> listaRegras) {
 
         return new Resolucao(
@@ -84,7 +105,7 @@ public class DatabaseHelperTest {
         );
     }
 
-    private List<Regra> criaListaDeRegras(){
+    private List<Regra> criaListaDeRegras() {
         List<String> dependencias = new ArrayList<>();
         dependencias.add("a");
         dependencias.add("b");
@@ -96,7 +117,7 @@ public class DatabaseHelperTest {
     }
 
     private static void createDatabaseConnection() {
-        mongoClient = new MongoClient();
+        MongoClient mongoClient = new MongoClient();
         mongoDB = mongoClient.getDatabase("SAEP-test");
     }
 
