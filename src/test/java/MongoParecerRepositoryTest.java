@@ -1,8 +1,8 @@
+import br.ufg.inf.es.saep.sandbox.dominio.Nota;
+import br.ufg.inf.es.saep.sandbox.dominio.Parecer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mongodb.client.MongoDatabase;
-import model.Nota;
-import model.Parecer;
 import org.bson.Document;
 import org.junit.*;
 import persistencia.DatabaseHelper;

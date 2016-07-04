@@ -5,8 +5,9 @@
 
 package persistencia.repository;
 
-import model.Resolucao;
-import model.Tipo;
+
+import br.ufg.inf.es.saep.sandbox.dominio.Resolucao;
+import br.ufg.inf.es.saep.sandbox.dominio.Tipo;
 
 import java.util.List;
 

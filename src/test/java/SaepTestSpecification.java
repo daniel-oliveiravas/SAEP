@@ -1,6 +1,6 @@
+import br.ufg.inf.es.saep.sandbox.dominio.*;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
-import model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

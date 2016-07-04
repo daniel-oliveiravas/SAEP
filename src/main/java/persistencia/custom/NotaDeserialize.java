@@ -1,10 +1,10 @@
 package persistencia.custom;
 
+import br.ufg.inf.es.saep.sandbox.dominio.Avaliavel;
+import br.ufg.inf.es.saep.sandbox.dominio.Nota;
+import br.ufg.inf.es.saep.sandbox.dominio.Pontuacao;
+import br.ufg.inf.es.saep.sandbox.dominio.Relato;
 import com.google.gson.*;
-import model.Avaliavel;
-import model.Nota;
-import model.Pontuacao;
-import model.Relato;
 
 import java.lang.reflect.Type;
 

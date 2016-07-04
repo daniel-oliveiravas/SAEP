@@ -5,10 +5,11 @@
 
 package persistencia.repository;
 
-import model.Avaliavel;
-import model.Nota;
-import model.Parecer;
-import model.Radoc;
+
+import br.ufg.inf.es.saep.sandbox.dominio.Avaliavel;
+import br.ufg.inf.es.saep.sandbox.dominio.Nota;
+import br.ufg.inf.es.saep.sandbox.dominio.Parecer;
+import br.ufg.inf.es.saep.sandbox.dominio.Radoc;
 
 /**
  * Oferece noção de coleções de pareceres em memória.

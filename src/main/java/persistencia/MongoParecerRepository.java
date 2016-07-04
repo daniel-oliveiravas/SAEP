@@ -1,11 +1,11 @@
 package persistencia;
 
+import br.ufg.inf.es.saep.sandbox.dominio.Avaliavel;
+import br.ufg.inf.es.saep.sandbox.dominio.Nota;
+import br.ufg.inf.es.saep.sandbox.dominio.Parecer;
+import br.ufg.inf.es.saep.sandbox.dominio.Radoc;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import model.Avaliavel;
-import model.Nota;
-import model.Parecer;
-import model.Radoc;
 import org.bson.Document;
 import persistencia.custom.NotaDeserialize;
 import persistencia.repository.ParecerRepository;
@@ -60,7 +60,7 @@ public class MongoParecerRepository implements ParecerRepository {
 
     @Override
     public void removeNota(Avaliavel original) {
-
+        //TODO: Deveria passar o identificador do parecer
     }
 
     @Override
