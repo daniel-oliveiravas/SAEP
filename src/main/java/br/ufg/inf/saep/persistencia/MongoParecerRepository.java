@@ -3,9 +3,11 @@ package br.ufg.inf.saep.persistencia;
 import br.ufg.inf.es.saep.sandbox.dominio.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mongodb.client.model.IndexOptions;
 import org.bson.Document;
 import br.ufg.inf.saep.persistencia.custom.NotaDeserialize;
 
+import javax.print.Doc;
 import java.util.List;
 
 public class MongoParecerRepository implements ParecerRepository {
@@ -23,7 +25,7 @@ public class MongoParecerRepository implements ParecerRepository {
     }
 
     @Override
-    public void adicionaNota(String parecer, Nota nota) {
+    public void adicionaNota(String parecer, Nota nota) throws IdentificadorDesconhecido {
         //Buscando Objeto Parecer com auxilio da classe DatabaseHelper
         Document parecerDocument = dbHelper.findById("id", parecer, parecerCollection);
 
@@ -49,10 +51,9 @@ public class MongoParecerRepository implements ParecerRepository {
 
             dbHelper.updateCollectionObject("id", parecer, novoParecerJson, parecerCollection);
 
+        } else {
+            throw new IdentificadorDesconhecido("Identificador de parecer " + parecer + " não encontrado.");
         }
-        // else {
-        // TODO: Throw not found exception
-        // }
     }
 
     @Override
@@ -62,6 +63,14 @@ public class MongoParecerRepository implements ParecerRepository {
 
     @Override
     public void persisteParecer(Parecer parecer) {
+
+        /* Verifica se já existe uma parecer com este identificador no banco de dados
+        *  caso exista, lance a execeção de identificador desconhecido
+        * */
+        Document document = dbHelper.findById("id", parecer.getId(), parecerCollection);
+        if(document != null){
+            throw new IdentificadorDesconhecido("Identificador do parecer " + parecer + " não encontrado.");
+        }
 
         String parecerJson = gson.toJson(parecer);
         dbHelper.saveIntoCollection(parecerJson, parecerCollection);

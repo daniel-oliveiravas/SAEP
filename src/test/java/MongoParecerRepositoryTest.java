@@ -1,3 +1,4 @@
+import br.ufg.inf.es.saep.sandbox.dominio.IdentificadorDesconhecido;
 import br.ufg.inf.es.saep.sandbox.dominio.Nota;
 import br.ufg.inf.es.saep.sandbox.dominio.Parecer;
 import br.ufg.inf.es.saep.sandbox.dominio.Radoc;
@@ -54,6 +55,17 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         assertEquals(2, parecerEncontrado.getNotas().size());
     }
 
+    @Test(expected = IdentificadorDesconhecido.class)
+    public void persisteParecerComIdentificadorJaExistenteTest() {
+
+        String idParecer = "identificadorParecer";
+        Parecer parecer = criarParecerTeste(idParecer);
+        Parecer outroParecer = criarParecerTeste(idParecer);
+
+        parecerRepository.persisteParecer(parecer);
+        parecerRepository.persisteParecer(outroParecer);
+    }
+
     @Test
     public void adicionaNotaTest() {
 
@@ -61,6 +73,22 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         Parecer parecer = criarParecerTeste(idParecer);
 
         parecerRepository.persisteParecer(parecer);
+        Nota novaParaAdicionar = criaNota(criaRelato("V - 5.5"), criaRelato("V - 3.0"), "Categoria da tabela está incorreta.");
+
+        parecerRepository.adicionaNota(idParecer, novaParaAdicionar);
+
+        Document parecerDocument = dbHelper.findById("id", idParecer, MongoParecerRepository.parecerCollection);
+        Parecer parecerAlterado = gson.fromJson(gson.toJson(parecerDocument), Parecer.class);
+
+        assertEquals(3, parecerAlterado.getNotas().size());
+
+    }
+
+    @Test(expected = IdentificadorDesconhecido.class)
+    public void adicionaNotaDeUmParecerNaoExistenteTest() {
+
+        String idParecer = "identificador de Parecer";
+
         Nota novaParaAdicionar = criaNota(criaRelato("V - 5.5"), criaRelato("V - 3.0"), "Categoria da tabela está incorreta.");
 
         parecerRepository.adicionaNota(idParecer, novaParaAdicionar);

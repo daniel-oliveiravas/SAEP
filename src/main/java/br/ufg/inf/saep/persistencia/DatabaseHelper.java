@@ -2,6 +2,7 @@ package br.ufg.inf.saep.persistencia;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.IndexOptions;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
