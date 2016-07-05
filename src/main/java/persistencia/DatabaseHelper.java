@@ -3,6 +3,7 @@ package persistencia;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -40,7 +41,7 @@ public class DatabaseHelper {
         Document documentToSave = parseJsonToDocument(jsonObject);
         collection.insertOne(documentToSave);
 
-        return this.findById("_id", documentToSave.getString("_id"), collectionName);
+        return this.findById((ObjectId) documentToSave.get("_id"), collectionName);
     }
 
 
@@ -50,10 +51,23 @@ public class DatabaseHelper {
     * @param nomeIdentificador - É o nome identificador utilizado pelo objeto que
     *  foi salvo no Banco (nome do atributo identificador Ex: "CPF")
     * @param valorIdentificador - É o valor do identificador que será buscado no banco (Ex: "111.222.333-44")
+    * @param collectionName - É o nome da coleção onde o objeto será buscado
     * */
     public Document findById(String nomeIdentificador, String valorIdentificador, String collectionNome) {
         MongoCollection<Document> collection = getCollection(collectionNome);
         return collection.find(eq(nomeIdentificador, valorIdentificador)).first();
+    }
+
+    /*
+    * Busca um objeto de uma coleção pelo ObjectId do MongoDB
+    *
+    * @param nomeIdentificador - É o nome identificador utilizado pelo objeto que
+    *  foi salvo no Banco (nome do atributo identificador Ex: "CPF")
+    * @param valorIdentificador - É o valor do identificador que será buscado no banco (Ex: "111.222.333-44")
+    * */
+    public Document findById(ObjectId objectId, String collectionNome) {
+        MongoCollection<Document> collection = getCollection(collectionNome);
+        return collection.find(eq("_id", objectId)).first();
     }
 
     /*
@@ -83,6 +97,12 @@ public class DatabaseHelper {
 
     }
 
+
+    public Document findObjectFromCollectionWithFilter(String collectionName, Document query) {
+
+        MongoCollection<Document> collection = getCollection(collectionName);
+        return collection.find(query).first();
+    }
 
     private Document parseJsonToDocument(String jsonObject) {
         return Document.parse(jsonObject);

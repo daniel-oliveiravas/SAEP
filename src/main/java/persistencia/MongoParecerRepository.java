@@ -97,6 +97,7 @@ public class MongoParecerRepository implements ParecerRepository {
             dbHelper.updateCollectionObject("id", novoParecer.getId(), novoParecerJson, parecerCollection);
 
         }
+        //TODO: lançar execeção quando não encontrar o identificador
 //        else {
 //        }
 
@@ -156,17 +157,22 @@ public class MongoParecerRepository implements ParecerRepository {
     @Override
     public void removeRadoc(String identificador) {
 
-        if (!verificaSeAlgumParecerReferenciaRadoc()) {
+        if (!verificaSeAlgumParecerReferenciaRadoc(identificador)) {
             dbHelper.removeObjectFromCollection("id", identificador, radocCollection);
         }
-
-
     }
 
-    private boolean verificaSeAlgumParecerReferenciaRadoc() {
+    private boolean verificaSeAlgumParecerReferenciaRadoc(String identificador) {
 
-        //TODO: Implementar verificacao na coleção de Parecer
-        return true;
+        Document query = new Document("radocs", identificador);
+
+        Document parecerEncontrado = dbHelper.findObjectFromCollectionWithFilter(parecerCollection, query);
+
+        if(parecerEncontrado == null){
+            return false;
+        } else {
+            return true;
+        }
 
     }
 

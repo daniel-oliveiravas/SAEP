@@ -86,4 +86,23 @@ class SaepTestSpecification {
     private Valor criaValorString(String valor) {
         return new Valor(valor);
     }
+
+    Radoc criarRadoc(String idRadoc, int anoBase) {
+
+        return new Radoc(
+                idRadoc,
+                anoBase,
+                criaListaRelatos()
+        );
+    }
+
+    private List<Relato> criaListaRelatos() {
+
+        List<Relato> listaRelatos = new ArrayList<>();
+        listaRelatos.add(criaRelato("idRelato1"));
+        listaRelatos.add(criaRelato("idRelato2"));
+        listaRelatos.add(criaRelato("idRelato3"));
+
+        return listaRelatos;
+    }
 }
