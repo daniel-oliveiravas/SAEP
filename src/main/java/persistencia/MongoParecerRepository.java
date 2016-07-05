@@ -15,6 +15,7 @@ import java.util.List;
 public class MongoParecerRepository implements ParecerRepository {
 
     public static final String parecerCollection = "parecer";
+    public static final String radocCollection = "radoc";
     private DatabaseHelper dbHelper;
     private static Gson gson;
 
@@ -74,31 +75,98 @@ public class MongoParecerRepository implements ParecerRepository {
     @Override
     public void atualizaFundamentacao(String parecer, String fundamentacao) {
 
+        Document parecerDocument = dbHelper.findById("id", parecer, parecerCollection);
+
+        if (parecerDocument != null) {
+
+            String parecerJson = gson.toJson(parecerDocument);
+
+            Parecer parecerEncontrado = gson.fromJson(parecerJson, Parecer.class);
+
+            Parecer novoParecer = new Parecer(
+                    parecerEncontrado.getId(),
+                    parecerEncontrado.getResolucao(),
+                    parecerEncontrado.getRadocs(),
+                    parecerEncontrado.getPontuacoes(),
+                    fundamentacao,
+                    parecerEncontrado.getNotas()
+            );
+
+            String novoParecerJson = gson.toJson(novoParecer);
+
+            dbHelper.updateCollectionObject("id", novoParecer.getId(), novoParecerJson, parecerCollection);
+
+        }
+//        else {
+//        }
+
     }
 
 
     @Override
     public Parecer byId(String id) {
+        Document parecerDocument = dbHelper.findById("id", id, parecerCollection);
+
+        if (parecerDocument != null) {
+            String parecerJson = gson.toJson(parecerDocument);
+            return gson.fromJson(parecerJson, Parecer.class);
+        }
+
         return null;
+
     }
 
     @Override
     public void removeParecer(String id) {
 
+        dbHelper.removeObjectFromCollection("id", id, parecerCollection);
+
     }
 
     @Override
     public Radoc radocById(String identificador) {
+
+        Document radocDocument = dbHelper.findById("id", identificador, radocCollection);
+
+        if (radocDocument != null) {
+
+            String radocJson = gson.toJson(radocDocument);
+
+            return gson.fromJson(radocJson, Radoc.class);
+        }
         return null;
     }
 
     @Override
     public String persisteRadoc(Radoc radoc) {
+
+        String radocJson = gson.toJson(radoc);
+        Document radocDocument = dbHelper.saveIntoCollectionReturningDocument(radocJson, radocCollection);
+
+        if (radocDocument != null) {
+            String radocSalvo = gson.toJson(radocDocument);
+            Radoc radocEncontrado = gson.fromJson(radocSalvo, Radoc.class);
+            return radocEncontrado.getId();
+        }
+
         return null;
+
     }
 
     @Override
     public void removeRadoc(String identificador) {
+
+        if (!verificaSeAlgumParecerReferenciaRadoc()) {
+            dbHelper.removeObjectFromCollection("id", identificador, radocCollection);
+        }
+
+
+    }
+
+    private boolean verificaSeAlgumParecerReferenciaRadoc() {
+
+        //TODO: Implementar verificacao na coleção de Parecer
+        return true;
 
     }
 

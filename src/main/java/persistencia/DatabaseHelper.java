@@ -15,7 +15,7 @@ public class DatabaseHelper {
     }
 
     /*
-    * Facilitador para salvar um objeto no mongo.
+    * Salvar um objeto em uma collection.
     *
     * @param String jsonObject - O objeto serializado para JSON no formato de uma String
     * @param String collectionName - o nome da coleção em que este objeto será salvo
@@ -27,6 +27,22 @@ public class DatabaseHelper {
         Document documentToSave = parseJsonToDocument(jsonObject);
         collection.insertOne(documentToSave);
     }
+
+    /*
+    * Salva um objeto em uma collection, retornando o objeto salvo
+    *
+    * @param String jsonObject - O objeto serializado para JSON no formato de uma String
+    * @param String collectionName - o nome da coleção em que este objeto será salvo
+    * */
+    public Document saveIntoCollectionReturningDocument(String jsonObject, String collectionName) {
+
+        MongoCollection<Document> collection = getCollection(collectionName);
+        Document documentToSave = parseJsonToDocument(jsonObject);
+        collection.insertOne(documentToSave);
+
+        return this.findById("_id", documentToSave.getString("_id"), collectionName);
+    }
+
 
     /*
     * Busca um objeto de uma coleção pelo identificador
