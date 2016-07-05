@@ -6,9 +6,9 @@ import com.google.gson.GsonBuilder;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.junit.*;
-import persistencia.DatabaseHelper;
-import persistencia.MongoParecerRepository;
-import persistencia.custom.NotaDeserialize;
+import br.ufg.inf.saep.persistencia.DatabaseHelper;
+import br.ufg.inf.saep.persistencia.MongoParecerRepository;
+import br.ufg.inf.saep.persistencia.custom.NotaDeserialize;
 
 import static org.junit.Assert.*;
 

@@ -1,14 +1,10 @@
-package persistencia;
+package br.ufg.inf.saep.persistencia;
 
-import br.ufg.inf.es.saep.sandbox.dominio.Avaliavel;
-import br.ufg.inf.es.saep.sandbox.dominio.Nota;
-import br.ufg.inf.es.saep.sandbox.dominio.Parecer;
-import br.ufg.inf.es.saep.sandbox.dominio.Radoc;
+import br.ufg.inf.es.saep.sandbox.dominio.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bson.Document;
-import persistencia.custom.NotaDeserialize;
-import persistencia.repository.ParecerRepository;
+import br.ufg.inf.saep.persistencia.custom.NotaDeserialize;
 
 import java.util.List;
 

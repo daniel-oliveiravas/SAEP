@@ -1,4 +1,4 @@
-package persistencia;
+package br.ufg.inf.saep.persistencia;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;

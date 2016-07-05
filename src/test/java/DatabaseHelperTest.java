@@ -6,7 +6,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.junit.*;
-import persistencia.DatabaseHelper;
+import br.ufg.inf.saep.persistencia.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.Date;

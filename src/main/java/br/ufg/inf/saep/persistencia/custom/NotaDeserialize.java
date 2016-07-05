@@ -1,4 +1,4 @@
-package persistencia.custom;
+package br.ufg.inf.saep.persistencia.custom;
 
 import br.ufg.inf.es.saep.sandbox.dominio.Avaliavel;
 import br.ufg.inf.es.saep.sandbox.dominio.Nota;
