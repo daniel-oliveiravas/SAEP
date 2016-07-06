@@ -1,7 +1,4 @@
-import br.ufg.inf.es.saep.sandbox.dominio.IdentificadorDesconhecido;
-import br.ufg.inf.es.saep.sandbox.dominio.Nota;
-import br.ufg.inf.es.saep.sandbox.dominio.Parecer;
-import br.ufg.inf.es.saep.sandbox.dominio.Radoc;
+import br.ufg.inf.es.saep.sandbox.dominio.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mongodb.client.MongoDatabase;
