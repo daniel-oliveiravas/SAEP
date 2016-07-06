@@ -1,13 +1,11 @@
 package br.ufg.inf.saep.persistencia;
 
 import br.ufg.inf.es.saep.sandbox.dominio.*;
+import br.ufg.inf.saep.persistencia.custom.NotaDeserialize;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mongodb.client.model.IndexOptions;
 import org.bson.Document;
-import br.ufg.inf.saep.persistencia.custom.NotaDeserialize;
 
-import javax.print.Doc;
 import java.util.List;
 
 public class MongoParecerRepository implements ParecerRepository {
@@ -52,7 +50,7 @@ public class MongoParecerRepository implements ParecerRepository {
             dbHelper.updateCollectionObject("id", parecer, novoParecerJson, parecerCollection);
 
         } else {
-            throw new IdentificadorDesconhecido("Identificador de parecer " + parecer + " não encontrado.");
+            throw new IdentificadorDesconhecido(mensagemParecerNaoEncontrado(parecer));
         }
     }
 
@@ -68,8 +66,8 @@ public class MongoParecerRepository implements ParecerRepository {
         *  caso exista, lance a execeção de identificador desconhecido
         * */
         Document document = dbHelper.findById("id", parecer.getId(), parecerCollection);
-        if(document != null){
-            throw new IdentificadorDesconhecido("Identificador do parecer " + parecer + " não encontrado.");
+        if (document != null) {
+            throw new IdentificadorDesconhecido(mensagemParecerNaoEncontrado(parecer.getId()));
         }
 
         String parecerJson = gson.toJson(parecer);
@@ -101,11 +99,9 @@ public class MongoParecerRepository implements ParecerRepository {
 
             dbHelper.updateCollectionObject("id", novoParecer.getId(), novoParecerJson, parecerCollection);
 
+        } else {
+            throw new IdentificadorDesconhecido(mensagemParecerNaoEncontrado(parecer));
         }
-        //TODO: lançar execeção quando não encontrar o identificador
-//        else {
-//        }
-
     }
 
 
@@ -173,12 +169,16 @@ public class MongoParecerRepository implements ParecerRepository {
 
         Document parecerEncontrado = dbHelper.findObjectFromCollectionWithFilter(parecerCollection, query);
 
-        if(parecerEncontrado == null){
+        if (parecerEncontrado == null) {
             return false;
         } else {
             return true;
         }
 
+    }
+
+    private String mensagemParecerNaoEncontrado(String idParecer) {
+        return "Identificador do parecer " + idParecer + " não encontrado.";
     }
 
 }
