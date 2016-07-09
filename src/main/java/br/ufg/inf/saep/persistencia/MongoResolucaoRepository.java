@@ -9,11 +9,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bson.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MongoResolucaoRepository implements ResolucaoRepository {
 
     public static String resolucaoCollection = "resolucao";
+    public static String tipoCollection = "tipo";
     private DatabaseHelper dbHelper;
     private Gson gson;
 
@@ -43,7 +45,7 @@ public class MongoResolucaoRepository implements ResolucaoRepository {
 
         Document resolucaoSalvaDocument = dbHelper.saveIntoCollectionReturningDocument(resolucaoJson, resolucaoCollection);
 
-        if(resolucaoSalvaDocument == null){
+        if (resolucaoSalvaDocument == null) {
             return null;
         }
 
@@ -59,26 +61,44 @@ public class MongoResolucaoRepository implements ResolucaoRepository {
 
     @Override
     public List<String> resolucoes() {
-        return null;
+        List<String> listaIdsResolucoes = new ArrayList<>();
+        Iterable<Document> listaResolucoes = dbHelper.findAll(resolucaoCollection);
+
+        String idResolucao;
+        for (Document documentResolucao : listaResolucoes) {
+            idResolucao = documentResolucao.getString("id");
+            listaIdsResolucoes.add(idResolucao);
+        }
+
+        return listaIdsResolucoes;
     }
 
     @Override
     public void persisteTipo(Tipo tipo) {
-
+        String tipoJson = gson.toJson(tipo);
+        dbHelper.saveIntoCollection(tipoJson, tipoCollection);
     }
 
     @Override
     public void removeTipo(String codigo) {
-
+        //TODO: Implementar remoção de tipo
     }
 
     @Override
     public Tipo tipoPeloCodigo(String codigo) {
-        return null;
+        Document tipoDocument = dbHelper.findById("id", codigo, tipoCollection);
+        String tipoJSON = gson.toJson(tipoDocument);
+        return gson.fromJson(tipoJSON, Tipo.class);
     }
 
     @Override
     public List<Tipo> tiposPeloNome(String nome) {
-        return null;
+        ArrayList<Tipo> listaTipo = new ArrayList<>();
+
+        for (Document tipoDocument : dbHelper.findAllLike("nome", nome, tipoCollection)) {
+            String tipoJson = tipoDocument.toJson();
+            listaTipo.add(gson.fromJson(tipoJson, Tipo.class));
+        }
+        return listaTipo;
     }
 }

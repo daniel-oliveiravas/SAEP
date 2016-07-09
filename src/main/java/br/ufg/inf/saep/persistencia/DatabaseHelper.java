@@ -6,6 +6,9 @@ import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.util.List;
+import java.util.regex.Pattern;
+
 import static com.mongodb.client.model.Filters.eq;
 
 public class DatabaseHelper {
@@ -40,7 +43,6 @@ public class DatabaseHelper {
     * objeto será salvo
     * */
     public Document saveIntoCollectionReturningDocument(String jsonObject, String collectionName) {
-
         MongoCollection<Document> collection = getCollection(collectionName);
         Document documentToSave = parseJsonToDocument(jsonObject);
         collection.insertOne(documentToSave);
@@ -57,22 +59,56 @@ public class DatabaseHelper {
     * @param valorIdentificador - É o valor do identificador que será buscado no banco (Ex: "111.222.333-44")
     * @param collectionName - É o nome da coleção onde o objeto será buscado
     * */
-    public Document findById(String nomeIdentificador, String valorIdentificador, String collectionNome) {
+    public Document findById(String idName, String idValue, String collectionNome) {
         MongoCollection<Document> collection = getCollection(collectionNome);
-        return collection.find(eq(nomeIdentificador, valorIdentificador)).first();
+        return collection.find(eq(idName, idValue)).first();
     }
 
     /*
-    * Busca um objeto de uma coleção pelo ObjectId do MongoDB
-    *
-    * @param nomeIdentificador - É o nome identificador utilizado pelo objeto que
-    *  foi salvo no Banco (nome do atributo identificador Ex: "CPF")
-    * @param valorIdentificador - É o valor do identificador que será buscado no banco (Ex: "111.222.333-44")
+    * Busca um objeto de uma coleção pelo ObjectId do MongoDB.
+    * Este método é usado somente internamente, de forma a abstrair os elementos específicos
+    * do MongoDB.
+    * @param ObjectId objectId - É o object ID usado como identificador no mongo
+    * @param collectionNome - Nome da coleção onde o objeto será buscado
     * */
-    public Document findById(ObjectId objectId, String collectionNome) {
+    private Document findById(ObjectId objectId, String collectionNome) {
         MongoCollection<Document> collection = getCollection(collectionNome);
         return collection.find(eq("_id", objectId)).first();
     }
+
+    /*
+    * Busca um objeto de uma coleção por um document passado como query
+    *
+    * @param String collectionName - É o nome identificador utilizado pelo objeto que
+    *  foi salvo no Banco (nome do atributo identificador Ex: "CPF")
+    * @param Document query - É o documento que será usando como comparador para buscar o objeto.
+    * */
+    public Document findObjectFromCollectionWithFilter(String collectionName, Document query) {
+        MongoCollection<Document> collection = getCollection(collectionName);
+        return collection.find(query).first();
+    }
+
+    /*
+    * Busca todos os documentos de uma coleção.
+    *
+    * @param String collectionName - Nome da coleção onde os documentos serão buscados
+    * */
+
+    public Iterable<Document> findAll(String collectionName) {
+        MongoCollection<Document> collection = getCollection(collectionName);
+        return collection.find();
+    }
+
+    /*
+    * Busca elemento que possui valor similar ao passado como parâmetro
+    * (Entenda por similar um texto que contém o outro por exemplo)
+    * */
+    public Iterable<Document> findAllLike(String idName, String idValue, String collectionName) {
+        MongoCollection<Document> collection = getCollection(collectionName);
+        Document query = new Document(idName, Pattern.compile(idValue));
+        return collection.find(query);
+    }
+
 
     /*
     * Atualiza um objeto de uma coleção pelo JSON no formato de uma String
@@ -84,11 +120,9 @@ public class DatabaseHelper {
     *
     * */
     public void updateCollectionObject(String idName, String idValue, String jsonObject, String collectionName) {
-
         MongoCollection<Document> collection = getCollection(collectionName);
         Document documentToUpdate = parseJsonToDocument(jsonObject);
         collection.replaceOne(eq(idName, idValue), documentToUpdate);
-
     }
 
     /*
@@ -105,13 +139,6 @@ public class DatabaseHelper {
         MongoCollection<Document> collection = getCollection(collectionName);
         DeleteResult result = collection.deleteOne(eq(idName, idValue));
         return result.getDeletedCount() > 0;
-    }
-
-
-    public Document findObjectFromCollectionWithFilter(String collectionName, Document query) {
-
-        MongoCollection<Document> collection = getCollection(collectionName);
-        return collection.find(query).first();
     }
 
     private Document parseJsonToDocument(String jsonObject) {

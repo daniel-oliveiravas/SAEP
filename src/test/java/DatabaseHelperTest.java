@@ -1,22 +1,27 @@
 
 import br.ufg.inf.es.saep.sandbox.dominio.Regra;
 import br.ufg.inf.es.saep.sandbox.dominio.Resolucao;
+import br.ufg.inf.saep.persistencia.DatabaseHelper;
 import br.ufg.inf.saep.persistencia.MongoResolucaoRepository;
 import com.google.gson.Gson;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.junit.*;
-import br.ufg.inf.saep.persistencia.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 public class DatabaseHelperTest extends SaepTestSpecification {
 
     private static MongoDatabase mongoDB;
     private static DatabaseHelper dbHelper;
+
+    private static String resolucaoCollectionNameForTest = "resolucaoTest";
+    private static String tipoCollectionNameForTest = "tipoTest";
 
     private Gson gson = new Gson();
 
@@ -49,7 +54,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
         Document objectFound = dbHelper.findById("id", identificadorResolucao, "resolucao");
         Resolucao resolucaoEncontrada = gson.fromJson(gson.toJson(objectFound), Resolucao.class);
 
-        Assert.assertEquals(resolucaoEncontrada.getId(), identificadorResolucao);
+        assertEquals(resolucaoEncontrada.getId(), identificadorResolucao);
     }
 
     @Test
@@ -73,8 +78,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
         Document resolucaoDocument = dbHelper.findById("id", resolucaoAlterada.getId(), "resolucao");
         Resolucao resolucaoAtualizada = gson.fromJson(gson.toJson(resolucaoDocument), Resolucao.class);
 
-        Assert.assertEquals(2, resolucaoAtualizada.getRegras().size());
-
+        assertEquals(2, resolucaoAtualizada.getRegras().size());
     }
 
     @Test
@@ -88,8 +92,41 @@ public class DatabaseHelperTest extends SaepTestSpecification {
 
         boolean resultado = dbHelper.removeObjectFromCollection("id", idResolucao, MongoResolucaoRepository.resolucaoCollection);
 
-        Assert.assertEquals(true, resultado);
+        assertEquals(true, resultado);
     }
+
+    @Test
+    public void saveIntoCollectionReturningDocumentTest() {
+        String identificadorResolucao = "123";
+        Resolucao resolucao = criaObjetoResolucao(identificadorResolucao, criaListaDeRegras());
+        String resolucaoJson = gson.toJson(resolucao);
+        Document savedDocument = dbHelper.saveIntoCollectionReturningDocument(resolucaoJson, resolucaoCollectionNameForTest);
+
+        assertEquals(savedDocument.getString("id"), identificadorResolucao);
+        assertNotNull(savedDocument);
+    }
+
+    @Test
+    public void findObjectFromCollectionWithFilterTest() {
+        String idResolucao = "123filter";
+        Resolucao resolucao = persisteResolucaoParaTeste(idResolucao);
+
+        Document query = new Document("nome", resolucao.getNome());
+        Document document = dbHelper.findObjectFromCollectionWithFilter(resolucaoCollectionNameForTest, query);
+
+        assertNotNull(document);
+    }
+
+    @Test
+    public void findAllTest() {
+        //TODO: teste para o método findAll
+    }
+
+    @Test
+    public void findAllLikeTest() {
+        //TODO: teste para o método findAllLike
+    }
+
 
     private Resolucao criaObjetoResolucao(String identificadorResolucao, List<Regra> listaRegras) {
 
@@ -115,10 +152,19 @@ public class DatabaseHelperTest extends SaepTestSpecification {
 
 
     private static void createCollectionsForTest() {
-        mongoDB.createCollection("resolucao");
+        mongoDB.createCollection(resolucaoCollectionNameForTest);
+        mongoDB.createCollection(tipoCollectionNameForTest);
     }
 
     private static void destroyTestCollections() {
-        mongoDB.getCollection("resolucao").drop();
+        mongoDB.getCollection(resolucaoCollectionNameForTest).drop();
+        mongoDB.getCollection(tipoCollectionNameForTest).drop();
+    }
+
+    private Resolucao persisteResolucaoParaTeste(String idResolucao){
+        Resolucao resolucao = criaObjetoResolucao(idResolucao, criaListaDeRegras());
+        String resolucaoJson = gson.toJson(resolucao);
+        dbHelper.saveIntoCollection(resolucaoJson, resolucaoCollectionNameForTest);
+        return resolucao;
     }
 }
