@@ -98,6 +98,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
 
         return new Resolucao(
                 identificadorResolucao,
+                "Nome da resolução",
                 "Descrição da resolução",
                 new Date(),
                 listaRegras

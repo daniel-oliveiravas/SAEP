@@ -1,12 +1,15 @@
 import br.ufg.inf.es.saep.sandbox.dominio.*;
+import br.ufg.inf.saep.persistencia.DatabaseHelper;
+import br.ufg.inf.saep.persistencia.MongoParecerRepository;
+import br.ufg.inf.saep.persistencia.custom.NotaDeserialize;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-import org.junit.*;
-import br.ufg.inf.saep.persistencia.DatabaseHelper;
-import br.ufg.inf.saep.persistencia.MongoParecerRepository;
-import br.ufg.inf.saep.persistencia.custom.NotaDeserialize;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import static org.junit.Assert.*;
 
@@ -52,7 +55,7 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         assertEquals(2, parecerEncontrado.getNotas().size());
     }
 
-    @Test(expected = IdentificadorDesconhecido.class)
+    @Test(expected = IdentificadorExistente.class)
     public void persisteParecerComIdentificadorJaExistenteTest() {
 
         String idParecer = "identificadorParecer";
@@ -82,7 +85,7 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
     }
 
     @Test(expected = IdentificadorDesconhecido.class)
-    public void adicionaNotaDeUmParecerNaoExistenteTest() {
+    public void adicionaNotaDeUmParecerNaoExistenteLancaExcecaoTest() {
 
         String idParecer = "identificador de Parecer";
 
@@ -111,6 +114,16 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         Parecer parecerAlterado = parecerRepository.byId(idParecer);
 
         assertEquals(fundamentacaoParaAlterar, parecerAlterado.getFundamentacao());
+
+    }
+
+    @Test(expected = IdentificadorDesconhecido.class)
+    public void atualizaFundamentacaoDeParecerNaoExistenteLancaExcecaoTest() {
+
+        String idParecer = "idParecerNaoExistente";
+
+        String fundamentacaoParaAlterar = "Fundamentação para alterar";
+        parecerRepository.atualizaFundamentacao(idParecer, fundamentacaoParaAlterar);
 
     }
 
@@ -153,6 +166,17 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
 
         assertNotNull(radocDocument);
 
+    }
+
+    @Test(expected = IdentificadorExistente.class)
+    public void persisteRadocComIdJaExistenteLancaExcecao() {
+
+        String idRadoc = "idRadoc";
+        Radoc radoc = criarRadoc(idRadoc, 1995);
+        Radoc segundoRadoc = criarRadoc(idRadoc, 2015);
+
+        String idRadocPersistido = parecerRepository.persisteRadoc(radoc);
+        String idRadocNaoPersistido = parecerRepository.persisteRadoc(segundoRadoc);
     }
 
     @Test

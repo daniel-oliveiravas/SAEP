@@ -12,6 +12,8 @@ public class MongoParecerRepository implements ParecerRepository {
 
     public static final String parecerCollection = "parecer";
     public static final String radocCollection = "radoc";
+    private static final String nomeEntidadeRadoc = "Radoc";
+    private static final String nomeEntidadeParecer = "Parecer";
     private DatabaseHelper dbHelper;
     private static Gson gson;
 
@@ -23,7 +25,7 @@ public class MongoParecerRepository implements ParecerRepository {
     }
 
     @Override
-    public void adicionaNota(String parecer, Nota nota) throws IdentificadorDesconhecido {
+    public void adicionaNota(String parecer, Nota nota) {
         //Buscando Objeto Parecer com auxilio da classe DatabaseHelper
         Document parecerDocument = dbHelper.findById("id", parecer, parecerCollection);
 
@@ -50,13 +52,13 @@ public class MongoParecerRepository implements ParecerRepository {
             dbHelper.updateCollectionObject("id", parecer, novoParecerJson, parecerCollection);
 
         } else {
-            throw new IdentificadorDesconhecido(mensagemParecerNaoEncontrado(parecer));
+            throw new IdentificadorDesconhecido(mensagemEntidadeNaoEncontrada(nomeEntidadeRadoc, parecer));
         }
     }
 
     @Override
-    public void removeNota(Avaliavel original) {
-        //TODO: Deveria passar o identificador do parecer
+    public void removeNota(String id, Avaliavel original) {
+        //TODO: Implementar remoção de nota
     }
 
     @Override
@@ -65,9 +67,10 @@ public class MongoParecerRepository implements ParecerRepository {
         /* Verifica se já existe uma parecer com este identificador no banco de dados
         *  caso exista, lance a execeção de identificador desconhecido
         * */
-        Document document = dbHelper.findById("id", parecer.getId(), parecerCollection);
+        String idParecer = parecer.getId();
+        Document document = dbHelper.findById("id", idParecer, parecerCollection);
         if (document != null) {
-            throw new IdentificadorDesconhecido(mensagemParecerNaoEncontrado(parecer.getId()));
+            throw new IdentificadorExistente(mensagemEntidadeJaExistente(nomeEntidadeRadoc, idParecer));
         }
 
         String parecerJson = gson.toJson(parecer);
@@ -80,8 +83,9 @@ public class MongoParecerRepository implements ParecerRepository {
 
         Document parecerDocument = dbHelper.findById("id", parecer, parecerCollection);
 
-        if (parecerDocument != null) {
-
+        if (parecerDocument == null) {
+            throw new IdentificadorDesconhecido(mensagemEntidadeNaoEncontrada(nomeEntidadeParecer, parecer));
+        } else {
             String parecerJson = gson.toJson(parecerDocument);
 
             Parecer parecerEncontrado = gson.fromJson(parecerJson, Parecer.class);
@@ -98,9 +102,6 @@ public class MongoParecerRepository implements ParecerRepository {
             String novoParecerJson = gson.toJson(novoParecer);
 
             dbHelper.updateCollectionObject("id", novoParecer.getId(), novoParecerJson, parecerCollection);
-
-        } else {
-            throw new IdentificadorDesconhecido(mensagemParecerNaoEncontrado(parecer));
         }
     }
 
@@ -120,9 +121,7 @@ public class MongoParecerRepository implements ParecerRepository {
 
     @Override
     public void removeParecer(String id) {
-
         dbHelper.removeObjectFromCollection("id", id, parecerCollection);
-
     }
 
     @Override
@@ -131,9 +130,7 @@ public class MongoParecerRepository implements ParecerRepository {
         Document radocDocument = dbHelper.findById("id", identificador, radocCollection);
 
         if (radocDocument != null) {
-
             String radocJson = gson.toJson(radocDocument);
-
             return gson.fromJson(radocJson, Radoc.class);
         }
         return null;
@@ -142,17 +139,23 @@ public class MongoParecerRepository implements ParecerRepository {
     @Override
     public String persisteRadoc(Radoc radoc) {
 
-        String radocJson = gson.toJson(radoc);
-        Document radocDocument = dbHelper.saveIntoCollectionReturningDocument(radocJson, radocCollection);
+        String idRadoc = radoc.getId();
+        Document radocExistenteDocument = dbHelper.findById("id", idRadoc, radocCollection);
 
-        if (radocDocument != null) {
-            String radocSalvo = gson.toJson(radocDocument);
-            Radoc radocEncontrado = gson.fromJson(radocSalvo, Radoc.class);
-            return radocEncontrado.getId();
+        if (radocExistenteDocument != null) {
+            throw new IdentificadorExistente(mensagemEntidadeJaExistente("Radoc", idRadoc));
+        } else {
+            String radocJson = gson.toJson(radoc);
+            Document radocDocument = dbHelper.saveIntoCollectionReturningDocument(radocJson, radocCollection);
+
+            //Verifica se a operação foi completada com sucesso
+            if (radocDocument != null) {
+                String radocSalvo = gson.toJson(radocDocument);
+                Radoc radocEncontrado = gson.fromJson(radocSalvo, Radoc.class);
+                return radocEncontrado.getId();
+            }
         }
-
         return null;
-
     }
 
     @Override
@@ -177,8 +180,12 @@ public class MongoParecerRepository implements ParecerRepository {
 
     }
 
-    private String mensagemParecerNaoEncontrado(String idParecer) {
-        return "Identificador do parecer " + idParecer + " não encontrado.";
+    private String mensagemEntidadeNaoEncontrada(String nomeEntidade, String idEntidade) {
+        return "Identificador do "+ nomeEntidade + " " + idEntidade + " não encontrado.";
+    }
+
+    private String mensagemEntidadeJaExistente(String nomeEntidade, String idEntidade) {
+        return "Identificador do " + nomeEntidade + " " + idEntidade + " já existe.";
     }
 
 }
