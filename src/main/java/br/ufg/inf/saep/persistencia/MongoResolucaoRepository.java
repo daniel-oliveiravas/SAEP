@@ -13,7 +13,7 @@ import java.util.List;
 
 public class MongoResolucaoRepository implements ResolucaoRepository {
 
-    private static String resolucaoCollection = "resolucao";
+    public static String resolucaoCollection = "resolucao";
     private DatabaseHelper dbHelper;
     private Gson gson;
 
@@ -54,7 +54,7 @@ public class MongoResolucaoRepository implements ResolucaoRepository {
 
     @Override
     public boolean remove(String identificador) {
-        return false;
+        return dbHelper.removeObjectFromCollection("id", identificador, resolucaoCollection);
     }
 
     @Override

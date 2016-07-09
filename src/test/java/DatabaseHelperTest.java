@@ -1,6 +1,7 @@
 
 import br.ufg.inf.es.saep.sandbox.dominio.Regra;
 import br.ufg.inf.es.saep.sandbox.dominio.Resolucao;
+import br.ufg.inf.saep.persistencia.MongoResolucaoRepository;
 import com.google.gson.Gson;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -45,11 +46,10 @@ public class DatabaseHelperTest extends SaepTestSpecification {
         String resolucaoJSON = gson.toJson(resolucao);
         dbHelper.saveIntoCollection(resolucaoJSON, "resolucao");
 
-        Document objectFound = dbHelper.findById("nome", identificadorResolucao, "resolucao");
+        Document objectFound = dbHelper.findById("id", identificadorResolucao, "resolucao");
         Resolucao resolucaoEncontrada = gson.fromJson(gson.toJson(objectFound), Resolucao.class);
 
-        Assert.assertEquals(resolucaoEncontrada.getNome(), identificadorResolucao);
-
+        Assert.assertEquals(resolucaoEncontrada.getId(), identificadorResolucao);
     }
 
     @Test
@@ -68,9 +68,9 @@ public class DatabaseHelperTest extends SaepTestSpecification {
 
         Resolucao resolucaoAlterada = criaObjetoResolucao(identificador, regras);
         String resolucaoAlteradaJSON = gson.toJson(resolucaoAlterada);
-        dbHelper.updateCollectionObject("nome", resolucao.getNome(), resolucaoAlteradaJSON, "resolucao");
+        dbHelper.updateCollectionObject("id", resolucao.getId(), resolucaoAlteradaJSON, "resolucao");
 
-        Document resolucaoDocument = dbHelper.findById("nome", resolucaoAlterada.getNome(), "resolucao");
+        Document resolucaoDocument = dbHelper.findById("id", resolucaoAlterada.getId(), "resolucao");
         Resolucao resolucaoAtualizada = gson.fromJson(gson.toJson(resolucaoDocument), Resolucao.class);
 
         Assert.assertEquals(2, resolucaoAtualizada.getRegras().size());
@@ -86,12 +86,9 @@ public class DatabaseHelperTest extends SaepTestSpecification {
 
         dbHelper.saveIntoCollection(gson.toJson(resolucao), "resolucao");
 
-        long collectionSizeBeforeRemove = resolucaoCollection.count();
-        dbHelper.removeObjectFromCollection("nome", idResolucao, "resolucao");
-        long collectionSizeAfterRemove = resolucaoCollection.count();
+        boolean resultado = dbHelper.removeObjectFromCollection("id", idResolucao, MongoResolucaoRepository.resolucaoCollection);
 
-        Assert.assertEquals(1, collectionSizeBeforeRemove);
-        Assert.assertEquals(0, collectionSizeAfterRemove);
+        Assert.assertEquals(true, resultado);
     }
 
     private Resolucao criaObjetoResolucao(String identificadorResolucao, List<Regra> listaRegras) {

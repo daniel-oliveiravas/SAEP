@@ -2,7 +2,7 @@ package br.ufg.inf.saep.persistencia;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -19,12 +19,13 @@ public class DatabaseHelper {
     /*
     * Salvar um objeto em uma collection.
     *
-    * @param String jsonObject - O objeto serializado para JSON no formato de uma String
-    * @param String collectionName - o nome da coleção em que este objeto será salvo
+    * @param String jsonObject - O objeto serializado para JSON no
+    * formato de uma String
+    * @param String collectionName - o nome da coleção em que
+    * este objeto será salvo
     *
     */
     public void saveIntoCollection(String jsonObject, String collectionName) {
-
         MongoCollection<Document> collection = getCollection(collectionName);
         Document documentToSave = parseJsonToDocument(jsonObject);
         collection.insertOne(documentToSave);
@@ -33,8 +34,10 @@ public class DatabaseHelper {
     /*
     * Salva um objeto em uma collection, retornando o objeto salvo
     *
-    * @param String jsonObject - O objeto serializado para JSON no formato de uma String
-    * @param String collectionName - o nome da coleção em que este objeto será salvo
+    * @param String jsonObject - O objeto serializado para JSON no
+    * formato de uma String
+    * @param String collectionName - o nome da coleção em que este
+    * objeto será salvo
     * */
     public Document saveIntoCollectionReturningDocument(String jsonObject, String collectionName) {
 
@@ -74,8 +77,8 @@ public class DatabaseHelper {
     /*
     * Atualiza um objeto de uma coleção pelo JSON no formato de uma String
     *
-    * @param idName - Nome do identificador utilizado para diferenciar este objeto dos demais
-    * @param idValue - Valor do identificador a ser procurado na coleção
+    * @param String idName - Nome do identificador utilizado para diferenciar este objeto dos demais
+    * @param String idValue - Valor do identificador a ser procurado na coleção
     * @param String jsonObject - Objeto a ser atualizado no formato de uma String
     * @param String collectionName - O nome da coleção em que o objeto será atualizado
     *
@@ -90,12 +93,18 @@ public class DatabaseHelper {
 
     /*
     * Remove um objecto de uma coleção pelo identificador do objeto
+    * retornando o resultado da remoção (true se realizado com sucesso,
+    * false caso contrário)
+    *
+    * @param String idName - Nome do atributo que será buscado na coleção
+    * @param String idValue - Valor do atributo que será buscado na coleção
+    * @param String collectionName - Nome da coleção onde o atributo será buscado
+    *
     * */
-    public void removeObjectFromCollection(String idName, String idValue, String collectionName) {
-
+    public boolean removeObjectFromCollection(String idName, String idValue, String collectionName) {
         MongoCollection<Document> collection = getCollection(collectionName);
-        collection.deleteOne(eq(idName, idValue));
-
+        DeleteResult result = collection.deleteOne(eq(idName, idValue));
+        return result.getDeletedCount() > 0;
     }
 
 
