@@ -175,8 +175,8 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         Radoc radoc = criarRadoc(idRadoc, 1995);
         Radoc segundoRadoc = criarRadoc(idRadoc, 2015);
 
-        String idRadocPersistido = parecerRepository.persisteRadoc(radoc);
-        String idRadocNaoPersistido = parecerRepository.persisteRadoc(segundoRadoc);
+        parecerRepository.persisteRadoc(radoc);
+        parecerRepository.persisteRadoc(segundoRadoc);
     }
 
     @Test
