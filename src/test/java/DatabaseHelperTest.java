@@ -7,13 +7,17 @@ import com.google.gson.Gson;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class DatabaseHelperTest extends SaepTestSpecification {
 
@@ -119,7 +123,18 @@ public class DatabaseHelperTest extends SaepTestSpecification {
 
     @Test
     public void findAllTest() {
-        //TODO: teste para o método findAll
+        String idResolucao = "idResolucao";
+        String outroIdResolucao = "outroIdResolucao";
+        Resolucao resolucao = persisteResolucaoParaTeste(idResolucao);
+        Resolucao outraResolucao = persisteResolucaoParaTeste(outroIdResolucao);
+        Iterable<Document> listaResolucoes = dbHelper.findAll(resolucaoCollectionNameForTest);
+
+        int count = 0;
+        for (Document resolucaoDocument : listaResolucoes) {
+            count++;
+        }
+
+        assertEquals(2, count);
     }
 
     @Test
@@ -161,7 +176,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
         mongoDB.getCollection(tipoCollectionNameForTest).drop();
     }
 
-    private Resolucao persisteResolucaoParaTeste(String idResolucao){
+    private Resolucao persisteResolucaoParaTeste(String idResolucao) {
         Resolucao resolucao = criaObjetoResolucao(idResolucao, criaListaDeRegras());
         String resolucaoJson = gson.toJson(resolucao);
         dbHelper.saveIntoCollection(resolucaoJson, resolucaoCollectionNameForTest);
