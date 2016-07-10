@@ -163,30 +163,6 @@ public class DatabaseHelperTest extends SaepTestSpecification {
         assertEquals(idResolucao, idResolucaoEncontrada);
     }
 
-
-    private Resolucao criaResolucao(String identificadorResolucao, List<Regra> listaRegras) {
-
-        return new Resolucao(
-                identificadorResolucao,
-                "Nome da resolução",
-                "Descrição da resolução",
-                new Date(),
-                listaRegras
-        );
-    }
-
-    private List<Regra> criaListaDeRegras() {
-        List<String> dependencias = new ArrayList<>();
-        dependencias.add("a");
-        dependencias.add("b");
-
-        Regra regraTeste = new Regra(4, "Descrição da Regra", 10, 5, "a", "a = b + c", "", "", "idTipoRelato", 1, dependencias);
-        List<Regra> listaRegras = new ArrayList<>();
-        listaRegras.add(regraTeste);
-        return listaRegras;
-    }
-
-
     private static void createCollectionsForTest() {
         mongoDB.createCollection(resolucaoCollectionNameForTest);
         mongoDB.createCollection(tipoCollectionNameForTest);

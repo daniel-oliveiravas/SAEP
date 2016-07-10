@@ -2,10 +2,7 @@ import br.ufg.inf.es.saep.sandbox.dominio.*;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class SaepTestSpecification {
 
@@ -96,7 +93,7 @@ class SaepTestSpecification {
         );
     }
 
-    private List<Relato> criaListaRelatos() {
+    List<Relato> criaListaRelatos() {
 
         List<Relato> listaRelatos = new ArrayList<>();
         listaRelatos.add(criaRelato("idRelato1"));
@@ -104,5 +101,27 @@ class SaepTestSpecification {
         listaRelatos.add(criaRelato("idRelato3"));
 
         return listaRelatos;
+    }
+
+    Resolucao criaResolucao(String identificadorResolucao, List<Regra> listaRegras) {
+
+        return new Resolucao(
+                identificadorResolucao,
+                "Nome da resolução",
+                "Descrição da resolução",
+                new Date(),
+                listaRegras
+        );
+    }
+
+    List<Regra> criaListaDeRegras() {
+        List<String> dependencias = new ArrayList<>();
+        dependencias.add("a");
+        dependencias.add("b");
+
+        Regra regraTeste = new Regra(4, "Descrição da Regra", 10, 5, "a", "a = b + c", "", "", "idTipoRelato", 1, dependencias);
+        List<Regra> listaRegras = new ArrayList<>();
+        listaRegras.add(regraTeste);
+        return listaRegras;
     }
 }

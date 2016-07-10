@@ -81,7 +81,6 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         Parecer parecerAlterado = gson.fromJson(gson.toJson(parecerDocument), Parecer.class);
 
         assertEquals(3, parecerAlterado.getNotas().size());
-
     }
 
     @Test(expected = IdentificadorDesconhecido.class)
@@ -97,7 +96,6 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         Parecer parecerAlterado = gson.fromJson(gson.toJson(parecerDocument), Parecer.class);
 
         assertEquals(3, parecerAlterado.getNotas().size());
-
     }
 
     @Test
@@ -114,7 +112,6 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         Parecer parecerAlterado = parecerRepository.byId(idParecer);
 
         assertEquals(fundamentacaoParaAlterar, parecerAlterado.getFundamentacao());
-
     }
 
     @Test(expected = IdentificadorDesconhecido.class)
@@ -124,7 +121,6 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
 
         String fundamentacaoParaAlterar = "Fundamentação para alterar";
         parecerRepository.atualizaFundamentacao(idParecer, fundamentacaoParaAlterar);
-
     }
 
     @Test
@@ -165,7 +161,6 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         Document radocDocument = dbHelper.findById("id", idRadoc, MongoParecerRepository.radocCollection);
 
         assertNotNull(radocDocument);
-
     }
 
     @Test(expected = IdentificadorExistente.class)
@@ -204,7 +199,6 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         Radoc radocEncontrado = parecerRepository.radocById(idRadoc);
 
         assertNull(radocEncontrado);
-
     }
 
     @Test
@@ -223,7 +217,6 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         Radoc radocEncontrado = parecerRepository.radocById(idRadoc);
 
         assertNotNull(radocEncontrado);
-
     }
 
     private static void createParecerCollectionsForTest() {
