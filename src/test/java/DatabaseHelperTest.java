@@ -50,7 +50,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
     public void testeFindResolucaoById() {
 
         String identificadorResolucao = "12345";
-        Resolucao resolucao = criaObjetoResolucao(identificadorResolucao, criaListaDeRegras());
+        Resolucao resolucao = criaResolucao(identificadorResolucao, criaListaDeRegras());
 
         //Converte a resolução para JSON e salva no banco de Dados
         String resolucaoJSON = gson.toJson(resolucao);
@@ -66,7 +66,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
     public void testeUpdateResolucao() {
 
         String identificador = "123";
-        Resolucao resolucao = criaObjetoResolucao(identificador, criaListaDeRegras());
+        Resolucao resolucao = criaResolucao(identificador, criaListaDeRegras());
 
         String resolucaoJson = gson.toJson(resolucao);
         dbHelper.saveIntoCollection(resolucaoJson, "resolucao");
@@ -76,7 +76,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
         dependencia.add("dependenciaTeste");
         regras.add(new Regra(1, "Regra adicionada por update", 99, 99, "variavel", "dependenciaTeste = 0", "", "", "tipo1", 10, dependencia));
 
-        Resolucao resolucaoAlterada = criaObjetoResolucao(identificador, regras);
+        Resolucao resolucaoAlterada = criaResolucao(identificador, regras);
         String resolucaoAlteradaJSON = gson.toJson(resolucaoAlterada);
         dbHelper.updateCollectionObject("id", resolucao.getId(), resolucaoAlteradaJSON, "resolucao");
 
@@ -90,7 +90,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
     public void testeRemoveResolucao() {
 
         String idResolucao = "123";
-        Resolucao resolucao = criaObjetoResolucao(idResolucao, criaListaDeRegras());
+        Resolucao resolucao = criaResolucao(idResolucao, criaListaDeRegras());
         MongoCollection<Document> resolucaoCollection = mongoDB.getCollection("resolucao");
 
         dbHelper.saveIntoCollection(gson.toJson(resolucao), "resolucao");
@@ -103,7 +103,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
     @Test
     public void saveIntoCollectionReturningDocumentTest() {
         String identificadorResolucao = "123";
-        Resolucao resolucao = criaObjetoResolucao(identificadorResolucao, criaListaDeRegras());
+        Resolucao resolucao = criaResolucao(identificadorResolucao, criaListaDeRegras());
         String resolucaoJson = gson.toJson(resolucao);
         Document savedDocument = dbHelper.saveIntoCollectionReturningDocument(resolucaoJson, resolucaoCollectionNameForTest);
 
@@ -164,7 +164,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
     }
 
 
-    private Resolucao criaObjetoResolucao(String identificadorResolucao, List<Regra> listaRegras) {
+    private Resolucao criaResolucao(String identificadorResolucao, List<Regra> listaRegras) {
 
         return new Resolucao(
                 identificadorResolucao,
@@ -198,7 +198,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
     }
 
     private Resolucao persisteResolucaoParaTeste(String idResolucao) {
-        Resolucao resolucao = criaObjetoResolucao(idResolucao, criaListaDeRegras());
+        Resolucao resolucao = criaResolucao(idResolucao, criaListaDeRegras());
         String resolucaoJson = gson.toJson(resolucao);
         dbHelper.saveIntoCollection(resolucaoJson, resolucaoCollectionNameForTest);
         return resolucao;
