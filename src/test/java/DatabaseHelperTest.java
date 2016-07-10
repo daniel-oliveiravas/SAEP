@@ -50,7 +50,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
     public void testeFindResolucaoById() {
 
         String identificadorResolucao = "12345";
-        Resolucao resolucao = criaResolucao(identificadorResolucao, criaListaDeRegras());
+        Resolucao resolucao = criaResolucao(identificadorResolucao);
 
         //Converte a resolução para JSON e salva no banco de Dados
         String resolucaoJSON = gson.toJson(resolucao);
@@ -66,7 +66,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
     public void testeUpdateResolucao() {
 
         String identificador = "123";
-        Resolucao resolucao = criaResolucao(identificador, criaListaDeRegras());
+        Resolucao resolucao = criaResolucao(identificador);
 
         String resolucaoJson = gson.toJson(resolucao);
         dbHelper.saveIntoCollection(resolucaoJson, "resolucao");
@@ -90,7 +90,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
     public void testeRemoveResolucao() {
 
         String idResolucao = "123";
-        Resolucao resolucao = criaResolucao(idResolucao, criaListaDeRegras());
+        Resolucao resolucao = criaResolucao(idResolucao);
         MongoCollection<Document> resolucaoCollection = mongoDB.getCollection("resolucao");
 
         dbHelper.saveIntoCollection(gson.toJson(resolucao), "resolucao");
@@ -103,7 +103,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
     @Test
     public void saveIntoCollectionReturningDocumentTest() {
         String identificadorResolucao = "123";
-        Resolucao resolucao = criaResolucao(identificadorResolucao, criaListaDeRegras());
+        Resolucao resolucao = criaResolucao(identificadorResolucao);
         String resolucaoJson = gson.toJson(resolucao);
         Document savedDocument = dbHelper.saveIntoCollectionReturningDocument(resolucaoJson, resolucaoCollectionNameForTest);
 
@@ -174,7 +174,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
     }
 
     private Resolucao persisteResolucaoParaTeste(String idResolucao) {
-        Resolucao resolucao = criaResolucao(idResolucao, criaListaDeRegras());
+        Resolucao resolucao = criaResolucao(idResolucao);
         String resolucaoJson = gson.toJson(resolucao);
         dbHelper.saveIntoCollection(resolucaoJson, resolucaoCollectionNameForTest);
         return resolucao;

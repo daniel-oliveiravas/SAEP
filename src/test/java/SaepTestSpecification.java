@@ -103,6 +103,17 @@ class SaepTestSpecification {
         return listaRelatos;
     }
 
+    Resolucao criaResolucao(String identificadorResolucao) {
+
+        return new Resolucao(
+                identificadorResolucao,
+                "Nome da resolução",
+                "Descrição da resolução",
+                new Date(),
+                criaListaDeRegras()
+        );
+    }
+
     Resolucao criaResolucao(String identificadorResolucao, List<Regra> listaRegras) {
 
         return new Resolucao(

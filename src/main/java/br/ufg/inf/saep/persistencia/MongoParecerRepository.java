@@ -75,7 +75,6 @@ public class MongoParecerRepository implements ParecerRepository {
 
         String parecerJson = gson.toJson(parecer);
         dbHelper.saveIntoCollection(parecerJson, parecerCollection);
-
     }
 
     @Override
@@ -116,7 +115,6 @@ public class MongoParecerRepository implements ParecerRepository {
         }
 
         return null;
-
     }
 
     @Override
@@ -177,7 +175,6 @@ public class MongoParecerRepository implements ParecerRepository {
         } else {
             return true;
         }
-
     }
 
     private String mensagemEntidadeNaoEncontrada(String nomeEntidade, String idEntidade) {
