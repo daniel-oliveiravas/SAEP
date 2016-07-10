@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static javafx.scene.input.KeyCode.X;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -149,7 +148,19 @@ public class DatabaseHelperTest extends SaepTestSpecification {
 
     @Test
     public void findAllLikeTest() {
-        //TODO: teste para o método findAllLike
+        String idResolucao = "idFindAllLike";
+        Resolucao resolucao = persisteResolucaoParaTeste(idResolucao);
+        String nomeResolucao = resolucao.getNome();
+
+        Iterable<Document> resolucaoDocuments = dbHelper.findAllLike("nome", nomeResolucao, resolucaoCollectionNameForTest);
+
+        List<Document> documents = new ArrayList<>();
+
+        String idResolucaoEncontrada = "";
+        for (Document document : resolucaoDocuments) {
+            idResolucaoEncontrada = document.getString("id");
+        }
+        assertEquals(idResolucao, idResolucaoEncontrada);
     }
 
 
