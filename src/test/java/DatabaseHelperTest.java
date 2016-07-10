@@ -13,9 +13,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static javafx.scene.input.KeyCode.X;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -125,15 +127,23 @@ public class DatabaseHelperTest extends SaepTestSpecification {
     public void findAllTest() {
         String idResolucao = "idResolucao";
         String outroIdResolucao = "outroIdResolucao";
+        ArrayList<String> ids = new ArrayList<>();
+        ids.add(idResolucao);
+        ids.add(outroIdResolucao);
+
         Resolucao resolucao = persisteResolucaoParaTeste(idResolucao);
         Resolucao outraResolucao = persisteResolucaoParaTeste(outroIdResolucao);
         Iterable<Document> listaResolucoes = dbHelper.findAll(resolucaoCollectionNameForTest);
 
         int count = 0;
+        ArrayList<String> idsBuscados = new ArrayList<>();
         for (Document resolucaoDocument : listaResolucoes) {
+            idsBuscados.add(resolucaoDocument.getString("id"));
             count++;
         }
-
+        Collections.sort(ids);
+        Collections.sort(idsBuscados);
+        assertEquals(ids, idsBuscados);
         assertEquals(2, count);
     }
 
