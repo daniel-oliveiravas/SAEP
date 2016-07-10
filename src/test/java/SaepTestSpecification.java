@@ -135,4 +135,33 @@ class SaepTestSpecification {
         listaRegras.add(regraTeste);
         return listaRegras;
     }
+
+    Tipo criaTipo(String idTipo) {
+        return new Tipo(
+                idTipo,
+                "Nome do Tipo",
+                "Descrição do tipo",
+                criaAtributos()
+        );
+    }
+
+    Set<Atributo> criaAtributos() {
+        Set<Atributo> atributos = new LinkedHashSet<>();
+
+        Atributo atributo = new Atributo(
+                "Atrbiuto 1",
+                "Descrição do primeiro atributo",
+                2
+        );
+
+        Atributo outroAtributo = new Atributo(
+                "Atrbiuto 2",
+                "Descrição do segundo atributo",
+                1
+        );
+
+        atributos.add(atributo);
+        atributos.add(outroAtributo);
+        return atributos;
+    }
 }

@@ -65,7 +65,7 @@ public class MongoParecerRepository implements ParecerRepository {
     public void persisteParecer(Parecer parecer) {
 
         /* Verifica se já existe uma parecer com este identificador no banco de dados
-        *  caso exista, lance a execeção de identificador desconhecido
+        *  caso exista, lance a execeção de identificador já existente
         * */
         String idParecer = parecer.getId();
         Document document = dbHelper.findById("id", idParecer, parecerCollection);
