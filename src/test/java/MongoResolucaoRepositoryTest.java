@@ -140,6 +140,29 @@ public class MongoResolucaoRepositoryTest extends SaepTestSpecification {
         assertNull(tipoEncontrado);
     }
 
+    @Test
+    public void tiposPeloNomeInexistenteRetornaListaVaziaTest() {
+        String idTipo = "nomeNaoExistente";
+        List<Tipo> tipoEncontrado = resolucaoRepository.tiposPeloNome(idTipo);
+
+        assertEquals(0, tipoEncontrado.size());
+    }
+
+    @Test
+    public void tiposPeloNomeRetornaListaComSucessoTest() {
+        String idTipo = "idTipo";
+        String outroIdTipo = "outroIdTipo";
+        Tipo tipo = criaTipo(idTipo);
+        Tipo outroTipo = criaTipo(outroIdTipo);
+        String nomeTipo = "do";
+        resolucaoRepository.persisteTipo(tipo);
+        resolucaoRepository.persisteTipo(outroTipo);
+
+        List<Tipo> tipoEncontradoLista = resolucaoRepository.tiposPeloNome(nomeTipo);
+
+        assertEquals(2, tipoEncontradoLista.size());
+    }
+
     private static void createResolucaoRepositoryCollectionsForTest() {
         mongoDB.createCollection(MongoResolucaoRepository.resolucaoCollection);
         mongoDB.createCollection(MongoResolucaoRepository.tipoCollection);
