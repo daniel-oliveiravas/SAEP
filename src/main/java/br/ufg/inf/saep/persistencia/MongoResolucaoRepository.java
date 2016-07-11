@@ -38,6 +38,10 @@ public class MongoResolucaoRepository implements ResolucaoRepository {
     @Override
     public String persiste(Resolucao resolucao) {
 
+        if (resolucao.getId() == null | resolucao.getId().equals("")) {
+            throw new CampoExigidoNaoFornecido("id");
+        }
+
         String resolucaoJson = gson.toJson(resolucao);
 
         Document resolucaoSalvaDocument = dbHelper.saveIntoCollectionReturningDocument(resolucaoJson, resolucaoCollection);
@@ -105,7 +109,7 @@ public class MongoResolucaoRepository implements ResolucaoRepository {
         return listaTipo;
     }
 
-    private String mensagemResolucaoUsaTipoException(){
+    private String mensagemResolucaoUsaTipoException() {
         return "Existe uma resolução referenciando esse tipo";
     }
 }
