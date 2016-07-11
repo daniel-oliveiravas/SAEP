@@ -58,7 +58,10 @@ public class MongoParecerRepository implements ParecerRepository {
 
     @Override
     public void removeNota(String id, Avaliavel original) {
-        //TODO: Implementar remoção de nota
+        String avaliavelJSON = gson.toJson(original);
+        Document documentOriginalParaRemover = new Document("notas", new Document("original", Document.parse(avaliavelJSON)));
+        Document removeQuery = new Document("$pull", documentOriginalParaRemover);
+        dbHelper.updateObjectWithFilter("id", id, parecerCollection, removeQuery);
     }
 
     @Override

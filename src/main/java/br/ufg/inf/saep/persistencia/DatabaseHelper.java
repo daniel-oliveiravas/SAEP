@@ -141,6 +141,11 @@ public class DatabaseHelper {
         return result.getDeletedCount() > 0;
     }
 
+    public void updateObjectWithFilter(String idName, String idValue, String collectionName, Document query){
+        MongoCollection<Document> collection = getCollection(collectionName);
+        collection.updateOne(eq(idName, idValue), query);
+    }
+
     private Document parseJsonToDocument(String jsonObject) {
         return Document.parse(jsonObject);
     }

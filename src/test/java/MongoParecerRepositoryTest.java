@@ -219,6 +219,20 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         assertNotNull(radocEncontrado);
     }
 
+    @Test
+    public void removeNotaComSucessoTest() {
+        String idParecer = "idParecer";
+        persisteParecerParaTeste(idParecer);
+
+
+        Relato relatoOriginalPadrao = criaRelato("II - 3.1");
+
+        parecerRepository.removeNota(idParecer, relatoOriginalPadrao);
+        Parecer parecerEncontrado = parecerRepository.byId(idParecer);
+
+        assertEquals(1, parecerEncontrado.getNotas().size());
+    }
+
     private static void createParecerCollectionsForTest() {
         mongoDB.createCollection(MongoParecerRepository.parecerCollection);
         mongoDB.createCollection(MongoParecerRepository.radocCollection);
