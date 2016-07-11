@@ -25,11 +25,6 @@ public class MongoResolucaoRepositoryTest extends SaepTestSpecification {
         resolucaoRepository = new MongoResolucaoRepository(dbHelper);
     }
 
-    @Before
-    public void createResolucaoCollection() {
-        createResolucaoRepositoryCollectionsForTest();
-    }
-
     @After
     public void destroyResolucaoCollection() {
         destroyResolucaoRepositoryTestCollections();
@@ -185,11 +180,6 @@ public class MongoResolucaoRepositoryTest extends SaepTestSpecification {
 
         Tipo tipoEncontrado = resolucaoRepository.tipoPeloCodigo(idTipo);
         assertNull(tipoEncontrado);
-    }
-
-    private static void createResolucaoRepositoryCollectionsForTest() {
-        mongoDB.createCollection(MongoResolucaoRepository.resolucaoCollection);
-        mongoDB.createCollection(MongoResolucaoRepository.tipoCollection);
     }
 
     private static void destroyResolucaoRepositoryTestCollections() {

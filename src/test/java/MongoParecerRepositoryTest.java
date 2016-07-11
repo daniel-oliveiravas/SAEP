@@ -30,11 +30,6 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         gson = gsonBuilder.create();
     }
 
-    @Before
-    public void createParecerCollection() {
-        createParecerCollectionsForTest();
-    }
-
     @After
     public void destroyParecerCollection() {
         destroyParecerTestCollections();
@@ -230,11 +225,6 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         Parecer parecerEncontrado = parecerRepository.byId(idParecer);
 
         assertEquals(1, parecerEncontrado.getNotas().size());
-    }
-
-    private static void createParecerCollectionsForTest() {
-        mongoDB.createCollection(MongoParecerRepository.parecerCollection);
-        mongoDB.createCollection(MongoParecerRepository.radocCollection);
     }
 
     private static void destroyParecerTestCollections() {

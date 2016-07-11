@@ -1,5 +1,5 @@
 import br.ufg.inf.es.saep.sandbox.dominio.*;
-import com.mongodb.MongoClient;
+import com.github.fakemongo.Fongo;
 import com.mongodb.client.MongoDatabase;
 
 import java.util.*;
@@ -7,8 +7,8 @@ import java.util.*;
 class SaepTestSpecification {
 
     static MongoDatabase createDatabaseConnection() {
-        MongoClient mongoClient = new MongoClient();
-        return mongoClient.getDatabase("SAEP-test");
+        Fongo fongo = new Fongo("Mock do Mongo para Testes");
+        return fongo.getDatabase("SAEP-test");
     }
 
     Parecer criarParecerTeste(String identificador) {

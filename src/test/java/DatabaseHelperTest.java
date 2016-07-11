@@ -25,8 +25,8 @@ public class DatabaseHelperTest extends SaepTestSpecification {
     private static MongoDatabase mongoDB;
     private static DatabaseHelper dbHelper;
 
-    private static String resolucaoCollectionNameForTest = "resolucaoTest";
-    private static String tipoCollectionNameForTest = "tipoTest";
+    private static String resolucaoCollectionNameForTest = "resolucao";
+    private static String tipoCollectionNameForTest = "tipo";
 
     private Gson gson = new Gson();
 
@@ -34,11 +34,6 @@ public class DatabaseHelperTest extends SaepTestSpecification {
     public static void testClassConfig() {
         mongoDB = createDatabaseConnection();
         dbHelper = new DatabaseHelper(mongoDB);
-    }
-
-    @Before
-    public void setup() {
-        createCollectionsForTest();
     }
 
     @After
@@ -161,11 +156,6 @@ public class DatabaseHelperTest extends SaepTestSpecification {
             idResolucaoEncontrada = document.getString("id");
         }
         assertEquals(idResolucao, idResolucaoEncontrada);
-    }
-
-    private static void createCollectionsForTest() {
-        mongoDB.createCollection(resolucaoCollectionNameForTest);
-        mongoDB.createCollection(tipoCollectionNameForTest);
     }
 
     private static void destroyTestCollections() {
