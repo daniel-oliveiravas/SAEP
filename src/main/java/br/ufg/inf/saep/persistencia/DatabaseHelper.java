@@ -126,7 +126,7 @@ public class DatabaseHelper {
     }
 
     /*
-    * Remove um objecto de uma coleção pelo identificador do objeto
+    * Remove um objeto de uma coleção pelo identificador do objeto
     * retornando o resultado da remoção (true se realizado com sucesso,
     * false caso contrário)
     *
@@ -140,6 +140,16 @@ public class DatabaseHelper {
         DeleteResult result = collection.deleteOne(eq(idName, idValue));
         return result.getDeletedCount() > 0;
     }
+
+    /*
+    * Atualiza um objeto de uma coleção. Os parâmetros idName, idValue e collectionName
+    * são usados para identificar qual será o objeto a ser alterado.
+    *
+    * @param String idName - O nome do atributo que será buscado na coleção
+    * @param String idValue - O valor do atributo que será buscado na coleção
+    * @param String collectionName - O nome da coleção em que o objeto se encontra
+    * @param Document query - As alterações a serem feitas no objeto encontrado
+    * */
 
     public void updateObjectWithFilter(String idName, String idValue, String collectionName, Document query){
         MongoCollection<Document> collection = getCollection(collectionName);
