@@ -130,7 +130,7 @@ class SaepTestSpecification {
         dependencias.add("a");
         dependencias.add("b");
 
-        Regra regraTeste = new Regra(4, "Descrição da Regra", 10, 5, "a", "a = b + c", "", "", "idTipoRelato", 1, dependencias);
+        Regra regraTeste = new Regra("a", 0, "Descrição da Regra", 10, 5, "a = b + c", "", "", "idTipoRelato", 1, dependencias);
         List<Regra> listaRegras = new ArrayList<>();
         listaRegras.add(regraTeste);
         return listaRegras;

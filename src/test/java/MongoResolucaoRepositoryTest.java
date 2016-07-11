@@ -1,12 +1,10 @@
 import br.ufg.inf.es.saep.sandbox.dominio.Resolucao;
+import br.ufg.inf.es.saep.sandbox.dominio.ResolucaoUsaTipoException;
 import br.ufg.inf.es.saep.sandbox.dominio.Tipo;
 import br.ufg.inf.saep.persistencia.DatabaseHelper;
 import br.ufg.inf.saep.persistencia.MongoResolucaoRepository;
 import com.mongodb.client.MongoDatabase;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +20,7 @@ public class MongoResolucaoRepositoryTest extends SaepTestSpecification {
     @BeforeClass
     public static void setup() {
         mongoDB = createDatabaseConnection();
+        destroyResolucaoRepositoryTestCollections();
         dbHelper = new DatabaseHelper(mongoDB);
         resolucaoRepository = new MongoResolucaoRepository(dbHelper);
     }
@@ -129,7 +128,7 @@ public class MongoResolucaoRepositoryTest extends SaepTestSpecification {
         Tipo tipoEncontrado = resolucaoRepository.tipoPeloCodigo(idTipo);
 
         assertNotNull(tipoEncontrado);
-        assertEquals(tipo.getNome(),tipoEncontrado.getNome());
+        assertEquals(tipo.getNome(), tipoEncontrado.getNome());
     }
 
     @Test
@@ -161,6 +160,31 @@ public class MongoResolucaoRepositoryTest extends SaepTestSpecification {
         List<Tipo> tipoEncontradoLista = resolucaoRepository.tiposPeloNome(nomeTipo);
 
         assertEquals(2, tipoEncontradoLista.size());
+    }
+
+    @Test(expected = ResolucaoUsaTipoException.class)
+    public void removeTipoReferenciadoPorResolucaoLancaExcecaoTest() {
+        String idResolucao = "idResolucao";
+        resolucaoRepository.persiste(criaResolucao(idResolucao));
+
+        String idTipo = "idTipoRelato";
+        Tipo tipo = criaTipo(idTipo);
+
+        resolucaoRepository.persisteTipo(tipo);
+        resolucaoRepository.removeTipo(idTipo);
+    }
+
+    @Test
+    public void removeTipoSemReferenciaTest() {
+
+        String idTipo = "idTipoRelato";
+        Tipo tipo = criaTipo(idTipo);
+
+        resolucaoRepository.persisteTipo(tipo);
+        resolucaoRepository.removeTipo(idTipo);
+
+        Tipo tipoEncontrado = resolucaoRepository.tipoPeloCodigo(idTipo);
+        assertNull(tipoEncontrado);
     }
 
     private static void createResolucaoRepositoryCollectionsForTest() {

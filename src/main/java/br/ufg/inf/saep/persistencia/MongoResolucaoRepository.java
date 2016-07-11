@@ -1,9 +1,6 @@
 package br.ufg.inf.saep.persistencia;
 
-import br.ufg.inf.es.saep.sandbox.dominio.Nota;
-import br.ufg.inf.es.saep.sandbox.dominio.Resolucao;
-import br.ufg.inf.es.saep.sandbox.dominio.ResolucaoRepository;
-import br.ufg.inf.es.saep.sandbox.dominio.Tipo;
+import br.ufg.inf.es.saep.sandbox.dominio.*;
 import br.ufg.inf.saep.persistencia.custom.NotaDeserialize;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -81,7 +78,13 @@ public class MongoResolucaoRepository implements ResolucaoRepository {
 
     @Override
     public void removeTipo(String codigo) {
-        //TODO: Implementar remoção de tipo
+        Document query = new Document("regras.tipoRelato", codigo);
+
+        if (dbHelper.findObjectFromCollectionWithFilter(resolucaoCollection, query) != null) {
+            throw new ResolucaoUsaTipoException(mensagemResolucaoUsaTipoException());
+        } else {
+            dbHelper.removeObjectFromCollection("id", codigo, tipoCollection);
+        }
     }
 
     @Override
@@ -100,5 +103,9 @@ public class MongoResolucaoRepository implements ResolucaoRepository {
             listaTipo.add(gson.fromJson(tipoJson, Tipo.class));
         }
         return listaTipo;
+    }
+
+    private String mensagemResolucaoUsaTipoException(){
+        return "Existe uma resolução referenciando esse tipo";
     }
 }

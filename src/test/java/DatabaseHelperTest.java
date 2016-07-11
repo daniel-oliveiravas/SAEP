@@ -74,7 +74,7 @@ public class DatabaseHelperTest extends SaepTestSpecification {
         List<Regra> regras = resolucao.getRegras();
         List<String> dependencia = new ArrayList<>();
         dependencia.add("dependenciaTeste");
-        regras.add(new Regra(1, "Regra adicionada por update", 99, 99, "variavel", "dependenciaTeste = 0", "", "", "tipo1", 10, dependencia));
+        regras.add(new Regra("variavel", 1, "Regra adicionada por update", 99, 99, "dependenciaTeste = 0", "", "", "tipo1", 10, dependencia));
 
         Resolucao resolucaoAlterada = criaResolucao(identificador, regras);
         String resolucaoAlteradaJSON = gson.toJson(resolucaoAlterada);
