@@ -1,3 +1,4 @@
+import br.ufg.inf.es.saep.sandbox.dominio.IdentificadorExistente;
 import br.ufg.inf.es.saep.sandbox.dominio.Resolucao;
 import br.ufg.inf.es.saep.sandbox.dominio.ResolucaoUsaTipoException;
 import br.ufg.inf.es.saep.sandbox.dominio.Tipo;
@@ -36,6 +37,13 @@ public class MongoResolucaoRepositoryTest extends SaepTestSpecification {
         String idSalvo = resolucaoRepository.persiste(criaResolucao(idResolucao));
 
         assertEquals(idSalvo, idResolucao);
+    }
+
+    @Test(expected = IdentificadorExistente.class)
+    public void persisteResolucaoComIdExistenteLancaExcecaoTest() {
+        String idResolucao = "idResolucao";
+        resolucaoRepository.persiste(criaResolucao(idResolucao));
+        resolucaoRepository.persiste(criaResolucao(idResolucao));
     }
 
     @Test
@@ -101,6 +109,15 @@ public class MongoResolucaoRepositoryTest extends SaepTestSpecification {
         assertEquals(2, idsResolucoes.size());
         assertEquals(idResolucao, idsResolucoes.get(0));
         assertEquals(outraResolucao, idsResolucoes.get(1));
+    }
+
+    @Test(expected = IdentificadorExistente.class)
+    public void persisteTipoComIdExistenteLancaExcecaoTest() {
+        String idTipo = "idTipo";
+        Tipo tipo = criaTipo(idTipo);
+
+        resolucaoRepository.persisteTipo(tipo);
+        resolucaoRepository.persisteTipo(tipo);
     }
 
     @Test

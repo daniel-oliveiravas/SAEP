@@ -38,8 +38,15 @@ public class MongoResolucaoRepository implements ResolucaoRepository {
     @Override
     public String persiste(Resolucao resolucao) {
 
-        if (resolucao.getId() == null | resolucao.getId().equals("")) {
+        String idResolucao = resolucao.getId();
+        if (idResolucao == null | "".equals(idResolucao)) {
             throw new CampoExigidoNaoFornecido("id");
+        }
+
+        Document resolucaoEncontrada = dbHelper.findById("id", idResolucao, resolucaoCollection);
+
+        if (resolucaoEncontrada != null) {
+            throw new IdentificadorExistente("Resolução com identificador " + idResolucao + " já existente.");
         }
 
         String resolucaoJson = gson.toJson(resolucao);
@@ -76,6 +83,13 @@ public class MongoResolucaoRepository implements ResolucaoRepository {
 
     @Override
     public void persisteTipo(Tipo tipo) {
+
+        Document tipoEncontrado = dbHelper.findById("id", tipo.getId(), tipoCollection);
+
+        if (tipoEncontrado != null) {
+            throw new IdentificadorExistente("Tipo com identificador " + tipo.getId() + " já existente.");
+        }
+
         String tipoJson = gson.toJson(tipo);
         dbHelper.saveIntoCollection(tipoJson, tipoCollection);
     }
