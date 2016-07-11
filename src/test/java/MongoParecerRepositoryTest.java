@@ -224,7 +224,6 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         String idParecer = "idParecer";
         persisteParecerParaTeste(idParecer);
 
-
         Relato relatoOriginalPadrao = criaRelato("II - 3.1");
 
         parecerRepository.removeNota(idParecer, relatoOriginalPadrao);
