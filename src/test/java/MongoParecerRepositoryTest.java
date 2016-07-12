@@ -61,7 +61,7 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
     }
 
     @Test
-    public void adicionaNotaTest() {
+    public void adicionaNotaNaoExistenteComSucessoTest() {
 
         String idParecer = "identificador de Parecer";
         Parecer parecer = criarParecerTeste(idParecer);
@@ -75,6 +75,26 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         Parecer parecerAlterado = gson.fromJson(gson.toJson(parecerDocument), Parecer.class);
 
         assertEquals(3, parecerAlterado.getNotas().size());
+    }
+
+    @Test
+    public void adicionaNotaJaExistenteComSucessoTest() {
+
+        String idParecer = "identificador de Parecer";
+        Parecer parecer = criarParecerTeste(idParecer);
+
+        parecerRepository.persisteParecer(parecer);
+
+        Nota notaDoParecer = parecer.getNotas().get(0);
+        Nota notaComMesmoOriginal = new Nota(notaDoParecer.getItemOriginal(), criaRelato("Teste de novo Relato"), "Um nova justificativa");
+
+        parecerRepository.adicionaNota(idParecer, notaComMesmoOriginal);
+
+        Document parecerDocument = dbHelper.findById("id", idParecer, MongoParecerRepository.parecerCollection);
+        Parecer parecerAlterado = gson.fromJson(gson.toJson(parecerDocument), Parecer.class);
+
+        assertEquals(2, parecerAlterado.getNotas().size());
+        assertEquals("Um nova justificativa", parecerAlterado.getNotas().get(1).getJustificativa());
     }
 
     @Test(expected = IdentificadorDesconhecido.class)
