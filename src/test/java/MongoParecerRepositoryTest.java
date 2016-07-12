@@ -21,9 +21,9 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
 
     @BeforeClass
     public static void setup() {
-        mongoDB = createDatabaseConnection();
-        dbHelper = new DatabaseHelper(mongoDB);
-        parecerRepository = new MongoParecerRepository(dbHelper);
+        parecerRepository = new MongoParecerRepository();
+        dbHelper = DatabaseHelper.getInstancia();
+        mongoDB = dbHelper.getDatabaseConnection();
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Nota.class, new NotaDeserialize());
         gson = gsonBuilder.create();

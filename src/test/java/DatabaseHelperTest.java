@@ -32,8 +32,8 @@ public class DatabaseHelperTest extends SaepTestSpecification {
 
     @BeforeClass
     public static void testClassConfig() {
-        mongoDB = createDatabaseConnection();
-        dbHelper = new DatabaseHelper(mongoDB);
+        dbHelper = DatabaseHelper.getInstancia();
+        mongoDB = dbHelper.getDatabaseConnection();
     }
 
     @After

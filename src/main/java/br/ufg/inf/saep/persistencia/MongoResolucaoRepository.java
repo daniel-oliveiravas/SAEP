@@ -4,6 +4,7 @@ import br.ufg.inf.es.saep.sandbox.dominio.*;
 import br.ufg.inf.saep.persistencia.custom.NotaDeserialize;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mongodb.MongoClient;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ public class MongoResolucaoRepository implements ResolucaoRepository {
     private DatabaseHelper dbHelper;
     private Gson gson;
 
-    public MongoResolucaoRepository(DatabaseHelper dbHelper) {
-        this.dbHelper = dbHelper;
+    public MongoResolucaoRepository() {
+        this.dbHelper = DatabaseHelper.getInstancia();
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Nota.class, new NotaDeserialize());
         gson = gsonBuilder.create();

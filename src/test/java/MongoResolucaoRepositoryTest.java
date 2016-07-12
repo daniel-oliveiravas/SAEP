@@ -20,10 +20,10 @@ public class MongoResolucaoRepositoryTest extends SaepTestSpecification {
 
     @BeforeClass
     public static void setup() {
-        mongoDB = createDatabaseConnection();
+        dbHelper = DatabaseHelper.getInstancia();
+        mongoDB = dbHelper.getDatabaseConnection();
+        resolucaoRepository = new MongoResolucaoRepository();
         destroyResolucaoRepositoryTestCollections();
-        dbHelper = new DatabaseHelper(mongoDB);
-        resolucaoRepository = new MongoResolucaoRepository(dbHelper);
     }
 
     @After

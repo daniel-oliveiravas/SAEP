@@ -1,12 +1,16 @@
 package br.ufg.inf.saep.persistencia;
 
+import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.util.List;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -14,9 +18,45 @@ import static com.mongodb.client.model.Filters.eq;
 public class DatabaseHelper {
 
     private MongoDatabase mongoDB;
+    private MongoClient mongoClient;
+    private static Properties databaseProperties;
+    private static DatabaseHelper databaseHelper;
 
-    public DatabaseHelper(MongoDatabase mongoDB) {
-        this.mongoDB = mongoDB;
+    private DatabaseHelper() {
+        instanciarDatabaseHelper();
+    }
+
+    public static synchronized DatabaseHelper getInstancia() {
+        if (databaseHelper == null) {
+            databaseHelper = new DatabaseHelper();
+        }
+        return databaseHelper;
+    }
+
+
+    private void instanciarDatabaseHelper() {
+        loadPropertiesFile();
+        String hostAddress = databaseProperties.getProperty("host");
+        String databaseName = databaseProperties.getProperty("database");
+        mongoClient = new MongoClient(hostAddress);
+        mongoDB = mongoClient.getDatabase(databaseName);
+    }
+
+    private static void loadPropertiesFile() {
+        databaseProperties = new Properties();
+        FileInputStream arquivoConfiguracao = null;
+        try {
+            arquivoConfiguracao = new FileInputStream("./database.properties");
+            databaseProperties.load(arquivoConfiguracao);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+    }
+
+    public MongoDatabase getDatabaseConnection() {
+        return mongoDB;
     }
 
     /*
@@ -151,7 +191,7 @@ public class DatabaseHelper {
     * @param Document query - As alterações a serem feitas no objeto encontrado
     * */
 
-    public void updateObjectWithFilter(String idName, String idValue, String collectionName, Document query){
+    public void updateObjectWithFilter(String idName, String idValue, String collectionName, Document query) {
         MongoCollection<Document> collection = getCollection(collectionName);
         collection.updateOne(eq(idName, idValue), query);
     }

@@ -15,8 +15,8 @@ public class MongoParecerRepository implements ParecerRepository {
     private DatabaseHelper dbHelper;
     private static Gson gson;
 
-    public MongoParecerRepository(DatabaseHelper dbHelper) {
-        this.dbHelper = dbHelper;
+    public MongoParecerRepository() {
+        this.dbHelper = DatabaseHelper.getInstancia();
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Nota.class, new NotaDeserialize());
         gson = gsonBuilder.create();
