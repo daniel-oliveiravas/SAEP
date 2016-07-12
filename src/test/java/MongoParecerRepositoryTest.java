@@ -7,7 +7,6 @@ import com.google.gson.GsonBuilder;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -196,7 +195,7 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         assertNull(radocEncontrado);
     }
 
-    @Test
+    @Test(expected = ExisteParecerReferenciandoRadoc.class)
     public void removeRadocDeParecerReferenciado() {
 
         String idParecer = "parecerComReferenciaParaRadoc";
@@ -208,10 +207,6 @@ public class MongoParecerRepositoryTest extends SaepTestSpecification {
         persisteRadocParaTeste(idRadoc, 1800);
 
         parecerRepository.removeRadoc(idRadoc);
-
-        Radoc radocEncontrado = parecerRepository.radocById(idRadoc);
-
-        assertNotNull(radocEncontrado);
     }
 
     @Test

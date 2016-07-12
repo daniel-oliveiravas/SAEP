@@ -6,8 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bson.Document;
 
-import java.util.List;
-
 public class MongoParecerRepository implements ParecerRepository {
 
     public static final String parecerCollection = "parecer";
@@ -30,27 +28,11 @@ public class MongoParecerRepository implements ParecerRepository {
         Document parecerDocument = dbHelper.findById("id", parecer, parecerCollection);
 
         if (parecerDocument != null) {
-            String parecerJson = gson.toJson(parecerDocument);
+            removeNota(parecer, nota.getItemOriginal());
 
-            Parecer parecerEncontrado = gson.fromJson(parecerJson, Parecer.class);
-            List<Nota> listaNotas = parecerEncontrado.getNotas();
-
-            //adicionando nova Nota na lista de notas do parecer
-            listaNotas.add(nota);
-
-            Parecer novoParecer = new Parecer(
-                    parecerEncontrado.getId(),
-                    parecerEncontrado.getResolucao(),
-                    parecerEncontrado.getRadocs(),
-                    parecerEncontrado.getPontuacoes(),
-                    parecerEncontrado.getFundamentacao(),
-                    listaNotas
-            );
-
-            String novoParecerJson = gson.toJson(novoParecer);
-
-            dbHelper.updateCollectionObject("id", parecer, novoParecerJson, parecerCollection);
-
+            String notaJson = gson.toJson(nota);
+            Document notaParaAdicionar = new Document("notas", Document.parse(notaJson));
+            dbHelper.updateObjectWithFilter("id", parecer, parecerCollection, new Document("$push", notaParaAdicionar));
         } else {
             throw new IdentificadorDesconhecido(mensagemEntidadeNaoEncontrada(nomeEntidadeRadoc, parecer));
         }
@@ -164,6 +146,8 @@ public class MongoParecerRepository implements ParecerRepository {
 
         if (!verificaSeAlgumParecerReferenciaRadoc(identificador)) {
             dbHelper.removeObjectFromCollection("id", identificador, radocCollection);
+        } else {
+            throw new ExisteParecerReferenciandoRadoc("Existe um parecer referenciando o radoc como id: " + identificador);
         }
     }
 
@@ -181,7 +165,7 @@ public class MongoParecerRepository implements ParecerRepository {
     }
 
     private String mensagemEntidadeNaoEncontrada(String nomeEntidade, String idEntidade) {
-        return "Identificador do "+ nomeEntidade + " " + idEntidade + " não encontrado.";
+        return "Identificador do " + nomeEntidade + " " + idEntidade + " não encontrado.";
     }
 
     private String mensagemEntidadeJaExistente(String nomeEntidade, String idEntidade) {
